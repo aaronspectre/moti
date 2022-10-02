@@ -1,0 +1,135 @@
+@font-face{
+	font-family: Lato;
+	src: url('Lato.ttf');
+}
+*{
+	transition: .3s;
+	font-family: Lato;
+}
+body{
+	margin: 0;
+	padding: 0;
+	background: whitesmoke;
+}
+
+.sidebar{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 8vw;
+	height: 96vh;
+	padding: 2vh 1vw;
+}
+.sidemenu{
+	background: white;
+	border-radius: 2vh;
+	width: 98%;
+	height: 98%;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	padding: 2% 1%;
+	text-align: center;
+}
+.sidemenu img{
+	width: 60%;
+	padding-top: 5vh;
+}
+.sidemenu ul{
+	list-style: none;
+	padding: 0;
+	padding-top: 15vh;
+}
+.sidemenu li{
+	font-size: 3vh;
+	margin-bottom: 3vw;
+}
+.sidemenu a{
+	text-decoration: none;
+	color: black;
+	padding: 1vw;
+	border-radius: 2.5vh;
+}
+.sidemenu a:hover{
+	background: whitesmoke;
+}
+
+.content{
+	width: 84vw;
+	height: 96vh;
+	background: whitesmoke;
+	padding: 2vh 2vw;
+	padding-left: 12vw;
+}
+.navbar{
+	text-align: right;
+}
+.navbar form{
+	position: absolute;
+	background: white;
+	padding: 0 1vw;
+	border-radius: 2vh;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.navbar input{
+	background: transparent;
+	padding: 1.5vh 1vh;
+	border: none;
+}
+.navbar input:focus{
+	outline: none;
+}
+.navbar button{
+	padding: 1vh 1.5vh;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+}
+.navbar a{
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	text-decoration: none;
+	color: black;
+	background: white;
+	padding: 1.5vh 1.1vw;
+	border-radius: 2vh;
+	display: block;
+	width: 1%;
+	float: right;
+}
+.navbar a:hover{
+	background: whitesmoke;
+}
+
+.board{
+	margin-top: 8vh;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-column-gap: 1vw;
+	grid-row-gap: 1vw;
+	padding-bottom: 4vh;
+}
+.order{
+	border-radius: 2vh;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	padding: 2vh;
+	background: white;
+}
+.order strong{
+	font-size: 3vh;
+}
+.order-actions{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 2vh;
+	margin-top: 2vh;
+}
+.order-actions a{
+	padding: 1.5vh;
+	text-align: center;
+	display: block;
+	text-decoration: none;
+	color: black;
+	border-radius: 2vh;
+	background: whitesmoke;
+}
+.order-actions a:hover{
+	background: lightgrey;
+}

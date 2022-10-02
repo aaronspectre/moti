@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Moti Control Panel</title>
+
+	{% load static %}
+	<link rel="icon" href="{% static 'moti.svg' %}">
+	<link rel="stylesheet" href="{% static 'style.css' %}">
+	<link rel="stylesheet" href="{% static 'login.css' %}">
+
+	<link href="https://kit-pro.fontawesome.com/releases/v6.2.0/css/pro.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="wrap">
+		<div class="login-form">
+			<h3>Authorization</h3>
+			<form action="{% url 'auth' %}" method="post">
+				<input type="text" placeholder="Username" name="username">
+				<input type="password" placeholder="Password" name="password">
+				<input type="submit" value="Login">
+				{% csrf_token %}
+			</form>
+		</div>
+	</div>
+</body>
+</html>
