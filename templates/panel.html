@@ -1,0 +1,113 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+	{% if show_add_product %}
+		<div class="add-form" id="add-form">
+			<div class="add-form-cover"></div>
+			<form action="{% url 'add_product' %}" method="post" class="add-product-form">
+				<div class="add-form-section">
+					<label for="#name"><small>Product Name</small></label>
+					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
+					<input required type="text" name="name_ru" placeholder="Russian">
+					<input required type="text" name="name_en" placeholder="English">
+					{% csrf_token %}
+				</div>
+				<div class="add-form-section">
+					<label for="#name"><small>Description</small></label>
+					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
+					<input required type="text" name="name_ru" placeholder="Russian">
+					<input required type="text" name="name_en" placeholder="English">
+				</div>
+				<div class="add-form-section">
+					<label for="#discount"><small>Discount</small></label>
+					<input required type="number" id="discount" name="discount" placeholder="0.0">
+					<label for="#price"><small>Price</small></label>
+					<input required type="number" id="price" name="price" placeholder="0.0">
+					<label for="#time"><small>Preparing Time (in minutes)</small></label>
+					<input required type="number" id="time" name="time" placeholder="0">
+					<label for="#category"><small>Category</small></label>
+					<select name="category" id="category">
+						<option value="0">Sushi</option>
+						<option value="0">Sets</option>
+					</select>
+				</div>
+				<div class="add-form-section">
+					<button type="submit">Save</button>
+				</div>
+			</form>
+		</div>
+		<button id="call-form-button"><i class="fas fa-plus"></i></button>
+		{% elif show_add_category %}
+		<div class="add-form" id="add-form">
+			<div class="add-form-cover"></div>
+			<form action="{% url 'add_category' %}" method="post" class="add-category-form">
+				<div class="add-form-section">
+					<label for="#name"><small>Cateogry Name</small></label>
+					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
+					<input required type="text" name="name_ru" placeholder="Russian">
+					<input required type="text" name="name_en" placeholder="English">
+					<button type="submit">Save</button>
+					{% csrf_token %}
+				</div>
+			</form>
+		</div>
+		<button id="call-form-button"><i class="fas fa-plus"></i></button>
+		{% endif %}
+		<div class="wrap">
+			<div class="sidebar">
+				<div class="sidemenu">
+					<img src="{% static 'moti.svg' %}" alt="logo">
+					<ul>
+						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
+						<li><a href="{% url 'deliver' %}"><i class="fal fa-moped"></i></a></li>
+						<li><a href="{% url 'refuse' %}"><i class="fal fa-trash"></i></a></li>
+						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
+						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="content">
+				<div class="navbar">
+					<form action="">
+						<input type="text" placeholder="Search">
+						<button><i class="fal fa-search"></i></button>
+					</form>
+					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+				</div>
+				<div class="board">
+					{% if categories %}
+						{% for category in categories %}
+							<div class="order">
+								<strong>id: {{category.id}}</strong>
+								<p><b>Uz:</b>&ensp;{{category.categoryName.uz.text}}</p>
+								<p><b>Ru:</b>&ensp;{{category.categoryName.ru.text}}</p>
+								<p><b>En:</b>&ensp;{{category.categoryName.eng.text}}</p>
+							</div>
+						{% endfor %}
+					{% elif products %}
+						{% for product in products %}
+							<div class="order">
+								<strong>{{order.createdBy}}</strong>
+								<p><i class="fal fa-location-dot"></i>&ensp;{{order.address.district}} {{order.address.street}} {{order.address.home}} {{order.address.entrance}} {{order.address.homeNumber}}</p>
+								<p><i class="fal fa-sushi-roll"></i>&ensp;Order:</p>
+								<ul>
+									{% for product in order.products %}
+										<li>x{{product.count}} {{product.product.name}}</li>
+									{% endfor %}
+								</ul>
+								<span></span>
+								<div class="order-actions">
+									<a href=""><i class="fal fa-trash"></i>&ensp;Refuse</a>
+									<a href=""><i class="fal fa-moped"></i>&ensp;Deliver</a>
+								</div>
+							</div>
+						{% endfor %}
+					{% else %}
+						<p><small>0 items are available</small></p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<script src="{% static 'script.js' %}"></script>
+{% endblock %}

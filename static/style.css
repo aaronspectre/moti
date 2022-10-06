@@ -133,3 +133,90 @@ body{
 .order-actions a:hover{
 	background: lightgrey;
 }
+
+
+
+
+#call-form-button{
+	position: absolute;
+	bottom: 4vh;
+	right: 3vw;
+	border-radius: 10vh;
+	border: none;
+	padding: 2vh 2.5vh;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	background: white;
+	cursor: pointer;
+}
+#call-form-button:hover{
+	background: lightgrey;
+}
+
+.add-form{
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
+	display: none;
+	opacity: 0;
+	transition: 1s;
+}
+.add-form-cover{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background: black;
+	opacity: 0.1;
+}
+.add-product-form{
+	width: 60%;
+	padding: 4vh 3vw;
+	background: white;
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 1vw;
+	border-radius: 3vh;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.add-category-form{
+	width: 20%;
+	padding: 4vh 3vw;
+	background: white;
+	position: relative;
+	border-radius: 3vh;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.add-form-section{
+	display: flex;
+	flex-direction: column;
+}
+.add-form label{
+	margin-top: 2vh;
+}
+.add-form input{
+	padding: 1.5vh 1vw;
+	margin-top: 2vh;
+	border: 1px solid #eeeeee;
+	border-radius: 1.5vh;
+}
+.add-form input:focus{
+	outline: none;
+	border-color: grey;
+}
+.add-form select{
+	padding: 1.5vh 1vw;
+	margin-top: 2vh;
+	border: 1px solid #eeeeee;
+	border-radius: 1.5vh;
+}
+.add-form button{
+	border: none;
+	padding: 1.5vh;
+	border-radius: 1.5vh;
+	cursor: pointer;
+	margin-top: 2vh;
+}

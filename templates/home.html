@@ -12,45 +12,53 @@
 	<link href="https://kit-pro.fontawesome.com/releases/v6.2.0/css/pro.min.css" rel="stylesheet">
 </head>
 <body>
-	<div class="wrap">
-		<div class="sidebar">
-			<div class="sidemenu">
-				<img src="{% static 'moti.svg' %}" alt="logo">
-				<ul>
-					<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
-					<li><a href="{% url 'deliver' %}"><i class="fal fa-moped"></i></a></li>
-					<li><a href="{% url 'refuse' %}"><i class="fal fa-trash"></i></a></li>
-				</ul>
+	{% block content %}
+		<div class="wrap">
+			<div class="sidebar">
+				<div class="sidemenu">
+					<img src="{% static 'moti.svg' %}" alt="logo">
+					<ul>
+						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
+						<li><a href="{% url 'deliver' %}"><i class="fal fa-moped"></i></a></li>
+						<li><a href="{% url 'refuse' %}"><i class="fal fa-trash"></i></a></li>
+						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
+						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="content">
+				<div class="navbar">
+					<form action="">
+						<input type="text" placeholder="Search">
+						<button><i class="fal fa-search"></i></button>
+					</form>
+					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+				</div>
+				<div class="board">
+					{% if orders %}
+						{% for order in orders %}
+							<div class="order">
+								<strong>{{order.createdBy}}</strong>
+								<p><i class="fal fa-location-dot"></i>&ensp;{{order.address.district}} {{order.address.street}} {{order.address.home}} {{order.address.entrance}} {{order.address.homeNumber}}</p>
+								<p><i class="fal fa-sushi-roll"></i>&ensp;Order:</p>
+								<ul>
+									{% for product in order.products %}
+										<li>x{{product.count}} {{product.product.name}}</li>
+									{% endfor %}
+								</ul>
+								<span></span>
+								<div class="order-actions">
+									<a href=""><i class="fal fa-trash"></i>&ensp;Refuse</a>
+									<a href=""><i class="fal fa-moped"></i>&ensp;Deliver</a>
+								</div>
+							</div>
+						{% endfor %}
+					{% else %}
+						<p><small>No orders are available</small></p>
+					{% endif %}
+				</div>
 			</div>
 		</div>
-		<div class="content">
-			<div class="navbar">
-				<form action="">
-					<input type="text" placeholder="Search">
-					<button><i class="fal fa-search"></i></button>
-				</form>
-				<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
-			</div>
-			<div class="board">
-				{% for order in orders %}
-					<div class="order">
-						<strong>{{order.createdBy}}</strong>
-						<p><i class="fal fa-location-dot"></i>&ensp;{{order.address.district}} {{order.address.street}} {{order.address.home}} {{order.address.entrance}} {{order.address.homeNumber}}</p>
-						<p><i class="fal fa-sushi-roll"></i>&ensp;Order:</p>
-						<ul>
-							{% for product in order.products %}
-								<li>x{{product.count}} {{product.product.name}}</li>
-							{% endfor %}
-						</ul>
-						<span></span>
-						<div class="order-actions">
-							<a href=""><i class="fal fa-trash"></i>&ensp;Refuse</a>
-							<a href=""><i class="fal fa-moped"></i>&ensp;Deliver</a>
-						</div>
-					</div>
-				{% endfor %}
-			</div>
-		</div>
-	</div>
+	{% endblock %}
 </body>
 </html>
