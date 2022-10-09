@@ -21,8 +21,13 @@
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
 						<li><a href="{% url 'deliver' %}"><i class="fal fa-moped"></i></a></li>
 						<li><a href="{% url 'refuse' %}"><i class="fal fa-trash"></i></a></li>
+						{% if 'ADMIN' in request.session.roles %}
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
+						{% endif %}
+						{% if 'MANAGER' in request.session.roles %}
+						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
+						{% endif %}
 					</ul>
 				</div>
 			</div>
@@ -35,21 +40,27 @@
 					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
 				</div>
 				<div class="board">
+					<div class="loader">
+						<img src="{% static 'spinner.svg' %}">
+					</div>
 					{% if orders %}
 						{% for order in orders %}
 							<div class="order">
-								<strong>{{order.createdBy}}</strong>
-								<p><i class="fal fa-location-dot"></i>&ensp;{{order.address.district}} {{order.address.street}} {{order.address.home}} {{order.address.entrance}} {{order.address.homeNumber}}</p>
-								<p><i class="fal fa-sushi-roll"></i>&ensp;Order:</p>
-								<ul>
-									{% for product in order.products %}
-										<li>x{{product.count}} {{product.product.name}}</li>
-									{% endfor %}
-								</ul>
-								<span></span>
+								<div class="order-body">
+									<strong>{{order.createdBy}}</strong>
+									<p><i class="fal fa-location-dot"></i>&ensp;<small>{{order.address}}</small></p>
+									<p><i class="fal fa-credit-card"></i>&ensp;<small>{{order.payType}}</small></p>
+									<p><i class="fal fa-comment"></i>&ensp;<small>{{order.comments}}</small></p>
+									<p><i class="fal fa-sushi-roll"></i>&ensp;<small>Order:</small></p>
+									<ul>
+										{% for product in order.products %}
+											<li>x<small>{{product.count}} {{product.product.name}}</small></li>
+										{% endfor %}
+									</ul>
+								</div>
 								<div class="order-actions">
-									<a href=""><i class="fal fa-trash"></i>&ensp;Refuse</a>
-									<a href=""><i class="fal fa-moped"></i>&ensp;Deliver</a>
+									<a href="{% url 'update_order' order_id=order.id status='CANCELLED' %}"><small><i class="fal fa-trash"></i>&ensp;Cancel</small></a>
+									<a href="{% url 'update_order' order_id=order.id status='DELIVER' %}"><small><i class="fal fa-moped"></i>&ensp;Deliver</small></a>
 								</div>
 							</div>
 						{% endfor %}

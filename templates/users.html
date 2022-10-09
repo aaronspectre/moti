@@ -1,0 +1,75 @@
+{% extends 'home.html' %}
+{% load static %}
+{% load filters %}
+{% block content %}
+		<div class="add-form" id="add-form">
+			<div class="add-form-cover"></div>
+			<form action="" method="post" class="add-category-form">
+				<div class="add-form-section">
+					<label for="#name"><small>First Name</small></label>
+					<input required type="text" id="name" name="first_name" placeholder="First Name">
+					<label for="#phone"><small>Phone Number</small></label>
+					<input required type="text" name="phone" id="phone" placeholder="998 XX XXX XX XX">
+					<label for="#role"><small>Role</small></label>
+					<select name="role" id="role" id="role">
+						<option value="ADMIN">Administrator</option>
+						<option value="MANAGER">Manager</option>
+						<option value="OPERATOR">Operator</option>
+						<option value="USER">User</option>
+					</select>
+					<button type="submit">Save</button>
+					{% csrf_token %}
+				</div>
+			</form>
+		</div>
+		<div class="wrap">
+			<div class="sidebar">
+				<div class="sidemenu">
+					<img src="{% static 'moti.svg' %}" alt="logo">
+					<ul>
+						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
+						<li><a href="{% url 'deliver' %}"><i class="fal fa-moped"></i></a></li>
+						<li><a href="{% url 'refuse' %}"><i class="fal fa-trash"></i></a></li>
+						{% if 'ADMIN' in request.session.roles %}
+						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
+						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+			<div class="content">
+				<div class="navbar">
+					<form action="">
+						<input type="text" placeholder="Search">
+						<button><i class="fal fa-search"></i></button>
+					</form>
+					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+				</div>
+				<div class="board">
+					<div class="users-hint">
+						<p><i class="fal fa-user-secret"></i>&ensp;<small>Admin</small></p>
+						<p><i class="fal fa-user-police-tie"></i>&ensp;<small>Manager</small></p>
+						<p><i class="fal fa-user-astronaut"></i>&ensp;<small>Operator</small></p>
+						<p><i class="fal fa-user-bounty-hunter"></i>&ensp;<small>User</small></p>
+					</div>
+					{% if users %}
+						{% for user in users %}
+							<div class="user" onclick="userCard(this)">
+								<i class="fal fa-user-{{user.roles|get_user_role}}"></i>&ensp;
+								<div>
+									<small class="user-phone-number"><strong>{{user.phoneNumber}}</strong></small>
+									<br>
+									<small class="user-first-name">{{user.firstName}}</small>
+								</div>
+								<small class="user-role" style="display: none;">{{user.roles.0}}</small>
+							</div>
+						{% endfor %}
+					{% else %}
+						<p><small>0 items are available</small></p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<script src="{% static 'users.js' %}"></script>
+{% endblock %}
