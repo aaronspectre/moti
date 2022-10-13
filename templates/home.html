@@ -5,22 +5,87 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Moti Control Panel</title>
 
+	{% load filters %}
 	{% load static %}
 	<link rel="icon" href="{% static 'moti.svg' %}">
 	<link rel="stylesheet" href="{% static 'style.css' %}">
 
 	<link href="https://kit-pro.fontawesome.com/releases/v6.2.0/css/pro.min.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </head>
 <body>
 	{% block content %}
+		<div class="add-form" id="add-form">
+			<div class="add-form-cover"></div>
+			<div class="add-product-form">
+				<div class="add-form-section">
+					<table>
+						<tr>
+							<td><strong>Phone:</strong></td>
+							<td id="order-view-phone"></td>
+						</tr>
+						<tr>
+							<td><strong>Price:</strong></td>
+							<td id="order-view-price"></td>
+						</tr>
+						<tr>
+							<td><strong>Status:</strong></td>
+							<td id="order-view-status"></td>
+						</tr>
+						<tr>
+							<td><strong>Type:</strong></td>
+							<td id="order-view-type"></td>
+						</tr>
+						<tr>
+							<td><strong>Order:</strong></td>
+							<td id="order-view-order"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="add-form-section">
+					<table>
+						<tr>
+							<td><strong>Date:</strong></td>
+							<td id="order-view-date"></td>
+						</tr>
+						<tr>
+							<td><strong>Delivery:</strong></td>
+							<td id="order-view-delivery"></td>
+						</tr>
+						<tr>
+							<td><strong>Address:</strong></td>
+							<td id="order-view-address"></td>
+						</tr>
+						<tr>
+							<td><strong>Pay Method:</strong></td>
+							<td id="order-view-pay"></td>
+						</tr>
+						<tr>
+							<td><strong>Comment:</strong></td>
+							<td id="order-view-comment"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="add-form-section">
+					<table>
+						<tr>
+							<td><canvas id="qr"></canvas></td>
+						</tr>
+					</table>
+				</div>
+				<div class="order-manage">
+					<a class="order-manage-buttons" id="order-cancel-button"><small><i class="fal fa-trash"></i>&ensp;Cancel</small></a>
+					<a class="order-manage-buttons" id="order-deliver-button"><small><i class="fal fa-moped"></i>&ensp;Deliver</small></a>
+				</div>
+			</div>
+		</div>
 		<div class="wrap">
 			<div class="sidebar">
 				<div class="sidemenu">
 					<img src="{% static 'moti.svg' %}" alt="logo">
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
-						<li><a href="{% url 'deliver' %}"><i class="fal fa-moped"></i></a></li>
-						<li><a href="{% url 'refuse' %}"><i class="fal fa-trash"></i></a></li>
 						{% if 'ADMIN' in request.session.roles %}
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
@@ -39,37 +104,40 @@
 					</form>
 					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
 				</div>
-				<div class="board">
+				<div class="orders-board">
 					<div class="loader">
 						<img src="{% static 'spinner.svg' %}">
 					</div>
-					{% if orders %}
-						{% for order in orders %}
-							<div class="order">
-								<div class="order-body">
-									<strong>{{order.createdBy}}</strong>
-									<p><i class="fal fa-location-dot"></i>&ensp;<small>{{order.address}}</small></p>
-									<p><i class="fal fa-credit-card"></i>&ensp;<small>{{order.payType}}</small></p>
-									<p><i class="fal fa-comment"></i>&ensp;<small>{{order.comments}}</small></p>
-									<p><i class="fal fa-sushi-roll"></i>&ensp;<small>Order:</small></p>
-									<ul>
-										{% for product in order.products %}
-											<li>x<small>{{product.count}} {{product.product.name}}</small></li>
-										{% endfor %}
-									</ul>
-								</div>
-								<div class="order-actions">
-									<a href="{% url 'update_order' order_id=order.id status='CANCELLED' %}"><small><i class="fal fa-trash"></i>&ensp;Cancel</small></a>
-									<a href="{% url 'update_order' order_id=order.id status='DELIVER' %}"><small><i class="fal fa-moped"></i>&ensp;Deliver</small></a>
-								</div>
-							</div>
-						{% endfor %}
-					{% else %}
-						<p><small>No orders are available</small></p>
-					{% endif %}
+					<table class="order-table" border="0" cellspacing="0">
+						<tr class="order-table-head">
+							<td>Phone</td>
+							<td>Name</td>
+							<td>ID</td>
+							<td>Price</td>
+							<td>Status</td>
+							<td>Date</td>
+							<td>Delivery</td>
+						</tr>
+						{% if orders %}
+							{% for order in orders %}
+								<tr onclick="showOrder({{order|safeorder}})">
+									<td><small>{{order.user}}</small></td>
+									<td><small>{{order.user}}</small></td>
+									<td><small>{{order.id}}</small></td>
+									<td><small>{{order.price}}</small></td>
+									<td><small class="order-status-color-{{order.status}}">{{order.status}}</small></td>
+									<td><small>{{order.creationTime | todate}}</small></td>
+									<td><small>{{order.deliveryTime}}</small></td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<p><small>No orders are available</small></p>
+						{% endif %}
+					</table>
 				</div>
 			</div>
 		</div>
+		<script src="{% static 'orders.js' %}"></script>
 	{% endblock %}
 </body>
 </html>

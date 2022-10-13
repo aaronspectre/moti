@@ -28,11 +28,12 @@
 					<img src="{% static 'moti.svg' %}" alt="logo">
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
-						<li><a href="{% url 'deliver' %}"><i class="fal fa-moped"></i></a></li>
-						<li><a href="{% url 'refuse' %}"><i class="fal fa-trash"></i></a></li>
 						{% if 'ADMIN' in request.session.roles %}
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
+						{% endif %}
+						{% if 'MANAGER' in request.session.roles %}
+						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
 						{% endif %}
 					</ul>
 				</div>

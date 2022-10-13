@@ -128,6 +128,15 @@ def users(request):
 	return render(request, 'users.html', {'users': users})
 
 
+def update_user(request, user_id):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.users(request.session['token'])
+	return render(request, 'users.html', {'users': users})
+
+
 def logout(request):
 	del request.session['token']
+	del request.session['roles']
 	return HttpResponseRedirect(reverse('login'))

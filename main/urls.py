@@ -23,6 +23,7 @@ urlpatterns = [
 	path('categories/delete/<int:category_id>', views.delete_category, name = 'delete_category'),
 
 	path('users', views.users, name = 'users'),
+	path('users/update/<int:user_id>', views.update_user, name = 'update_user'),
 
 	path('logout', views.logout, name = 'logout'),
 ]

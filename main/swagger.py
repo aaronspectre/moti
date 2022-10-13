@@ -35,15 +35,14 @@ class Swagger:
 	@staticmethod
 	def filter(status, token):
 		params = {
-			'from': '0',
-			'paged': 'false',
-			'sort.sorted': 'true',
-			'sort.unsorted': 'false',
-			'status': status,
-			'to': '100',
-			'unpaged': 'true'
+			"direction": "ASC",
+			"method": "APELSIN",
+			"orderType": "DELIVERY",
+			"page": 0,
+			"size": 100,
+			"sortBy": ["createdAt"]
 		}
-		response = json.loads(requests.get(ENDPOINT+'order', params = params, headers = {'Authorization': token}).text)
+		response = json.loads(requests.post(ENDPOINT+'order/all', json = params, headers = {'Authorization': token}).text)
 		return response
 
 

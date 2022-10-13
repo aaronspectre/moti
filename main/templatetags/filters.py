@@ -1,5 +1,6 @@
 import json
 from django import template
+from datetime import datetime
 
 register = template.Library()
 
@@ -19,3 +20,14 @@ def get_user_role(roles):
 @register.filter
 def format_data(data):
 	return json.dumps(data)
+
+
+
+@register.filter
+def todate(timestamp):
+	return datetime.fromtimestamp(timestamp / 1000).strftime('%d %b, %H:%M')
+
+
+@register.filter
+def safeorder(order):
+	return json.dumps(order)
