@@ -25,5 +25,9 @@ urlpatterns = [
 	path('users', views.users, name = 'users'),
 	path('users/update/<int:user_id>', views.update_user, name = 'update_user'),
 
+	path('fees', views.fees, name = 'fees'),
+	path('fees/add', views.add_fee, name = 'add_fee'),
+	path('fees/update/<int:fee_id>', views.update_fee, name = 'update_fee'),
+
 	path('logout', views.logout, name = 'logout'),
 ]

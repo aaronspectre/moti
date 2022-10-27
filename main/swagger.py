@@ -36,7 +36,7 @@ class Swagger:
 	def filter(status, token):
 		params = {
 			"direction": "ASC",
-			"method": "APELSIN",
+			"method": "PAYME",
 			"orderType": "DELIVERY",
 			"page": 0,
 			"size": 100,
@@ -110,6 +110,30 @@ class Swagger:
 	def deleteCategory(token, product_id):
 		response = requests.delete(ENDPOINT+'category/'+str(product_id), headers = {'Authorization': token})
 
+
+	@staticmethod
+	def fees(token):
+		response = json.loads(requests.get(ENDPOINT+'fee', headers = {'Authorization': token}).text)
+		return response
+
+
+	@staticmethod
+	def add_fee(token, data):
+		data = {
+			'deliveryPayment': float(data['payment']),
+			'price': float(data['price'])
+		}
+		response = requests.post(ENDPOINT+'fee', json = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
+		return response
+
+
+	@staticmethod
+	def update_fee(token, fee_id, data):
+		data = {
+			'deliveryPayment': float(data['payment']),
+			'price': float(data['price'])
+		}
+		response = requests.put(f'{ENDPOINT}fee/{fee_id}', json = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
 
 
 

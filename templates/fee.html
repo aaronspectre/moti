@@ -6,22 +6,18 @@
 			<div class="add-form-cover"></div>
 			<form action="" method="post" class="add-category-form">
 				<div class="add-form-section">
-					<label for="#name"><small>First Name</small></label>
-					<input required type="text" id="name" name="first_name" placeholder="First Name">
-					<label for="#phone"><small>Phone Number</small></label>
-					<input required type="text" name="phone" id="phone" placeholder="998 XX XXX XX XX">
-					<label for="#role"><small>Role</small></label>
-					<select name="role" id="role" id="role">
-						<option value="ADMIN">Administrator</option>
-						<option value="MANAGER">Manager</option>
-						<option value="OPERATOR">Operator</option>
-						<option value="USER">User</option>
-					</select>
+					<label for="#price"><small>Price</small></label>
+					<input required type="text" id="price" name="price" placeholder="0">
+					<label for="#payment"><small>Payment</small></label>
+					<input required type="text" name="payment" id="payment" placeholder="0">
 					<button type="submit">Save</button>
 					{% csrf_token %}
 				</div>
 			</form>
 		</div>
+
+		<button id="call-form-button" data-link="{% url 'add_fee' %}"><i class="fas fa-plus"></i></button>
+
 		<div class="wrap">
 			<div class="sidebar">
 				<div class="sidemenu">
@@ -52,21 +48,21 @@
 						<table class="order-table" border="0" cellspacing="0">
 							<tr class="order-table-head">
 								<td>ID</td>
-								<td>Phone</td>
-								<td>First Name</td>
-								<td>Roles</td>
+								<td>Price</td>
+								<td>Payment</td>
 							</tr>
-							{% if users %}
-								{% for user in users %}
-									<tr onclick="userCard(this)">
-										<td><small>{{user.id}}</small></td>
-										<td><small class="user-phone-number">{{user.phoneNumber}}</small></td>
-										<td><small class="user-first-name">{{user.firstName}}</small></td>
-										<td><small class="user-role">{{user.roles}}</small></td>
+							{% if fees %}
+								{% for fee in fees %}
+									<tr onclick="feeCard(this)">
+										<td><small class="fee-id">{{fee.id}}</small></td>
+										<td><small class="fee-price">{{fee.price}}</small></td>
+										<td><small class="fee-payment">{{fee.deliveryPayment}}</small></td>
 									</tr>
 								{% endfor %}
 							{% else %}
-								<p><small>No orders are available</small></p>
+								<tr>
+									<p><small>No fees are available</small></p>
+								</tr>
 							{% endif %}
 						</table>
 					</div>

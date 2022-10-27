@@ -136,6 +136,30 @@ def update_user(request, user_id):
 	return render(request, 'users.html', {'users': users})
 
 
+def fees(request):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	fees = Swagger.fees(request.session['token'])
+	return render(request, 'fee.html', {'fees': fees})
+
+
+def add_fee(request):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.add_fee(request.session['token'], request.POST)
+	return HttpResponseRedirect(reverse('fees'))
+
+
+def update_fee(request, fee_id):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.update_fee(request.session['token'], fee_id, request.POST)
+	return HttpResponseRedirect(reverse('fees'))
+
+
 def logout(request):
 	del request.session['token']
 	del request.session['roles']

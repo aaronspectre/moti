@@ -158,13 +158,6 @@ body{
 .loader img{
 	width: 5%;
 }
-.users-hint{
-	grid-column: span 4;
-	display: flex;
-}
-.users-hint p{
-	margin-right: 3vw;
-}
 .order{
 	background: transparent;
 }
@@ -222,21 +215,10 @@ body{
 }
 
 
-.user{
-	padding: 2vh 2vw;
-	border-radius: 2vh;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	background: white;
+.users-board{
+	width: 100%;
 	display: flex;
-	align-items: center;
-	cursor: pointer;
-}
-.user:hover{
-	opacity: .7;
-}
-.user i{
-	font-size: 4vh;
-	margin-right: 1vw;
+	grid-column: span 4;
 }
 
 
