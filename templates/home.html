@@ -80,6 +80,65 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="add-form" id="create-form">
+			<div class="add-form-cover"></div>
+			<form class="add-product-form" method="post" action="{% url 'create_order' %}">
+				<div class="add-form-section">
+					<label for="#address"><small>Address</small></label>
+					<select name="address" id="address">
+						<option value="1">Address</option>
+					</select>
+					<label for="#branch"><small>Branch</small></label>
+					<select name="branch" id="branch">
+						{% for branch in branches %}
+							<option value="{{branch.id}}">{{branch.information}}</option>
+						{% endfor %}
+					</select>
+					<label for="#order-type"><small>Order Type</small></label>
+					<select name="order-type" id="order-type">
+						<option value="DELIVERY">DELIVERY</option>
+						<option value="PICKUP ">PICKUP </option>
+					</select>
+					<label for="#payment"><small>Payment</small></label>
+					<select name="payment" id="payment">
+						<option value="PAYME">PAYME</option>
+						<option value="APELSIN">APELSIN</option>
+						<option value="CASH">CASH</option>
+						<option value="CLICK">CLICK</option>
+						<option value="TERMINAL">TERMINAL</option>
+					</select>
+				</div>
+				<div class="add-form-section">
+					<label for="#delivery"><small>Delivery Time</small></label>
+					<input type="text" name="delivery" id="delivery" placeholder="00:00">
+					<label for="#distance"><small>Distance</small></label>
+					<input type="number" name="distance" id="distance" placeholder="0">
+					<label for="#comment"><small>Comment</small></label>
+					<input type="text" name="comment" id="comment" placeholder="Comment">
+				</div>
+				<div class="add-form-section">
+					<label for="#product"><small>Order</small></label>
+					<div class="add-form-order-split">
+						<select id="product">
+							{% for product in products %}
+								<option value="{{product.productName.eng.text}}-{{product.id}}">{{product.productName.eng.text}}</option>
+							{% endfor %}
+						</select>
+						<input type="number" id="amount" placeholder="0">
+					</div>
+					<button type="button" onclick="addProduct()"><small>Add</small></button>
+					<button type="button" onclick="clearProducts()"><small>Clear</small></button>
+					<input type="hidden" id="orders" name="orders">
+					<ul id="add-form-section-order-list"></ul>
+				</div>
+				<div class="order-manage">
+					<button onclick="submitOrder()"><small>Create</small></button>
+				</div>
+				{% csrf_token %}
+			</form>
+		</div>
+		<button id="call-form-button" onclick="callForm()"><i class="fas fa-plus"></i></button>
 		<div class="wrap">
 			<div class="sidebar">
 				<div class="sidemenu">
@@ -106,6 +165,23 @@
 					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
 				</div>
 				<div class="orders-board">
+					<form action="{% url 'filter' %}" class="filters" method="get">
+						<i class="fal fa-filter-list"></i>
+						<select id="filter-order-type" name="order-type">
+							<option value="{{type}}">{{type}}</option>
+							<option value="DELIVERY">DELIVERY</option>
+							<option value="PICKUP ">PICKUP </option>
+						</select>
+						<select id="filter-payment-type" name="payment">
+							<option value="{{payment}}">{{payment}}</option>
+							<option value="PAYME">PAYME</option>
+							<option value="APELSIN">APELSIN</option>
+							<option value="CASH">CASH</option>
+							<option value="CLICK">CLICK</option>
+							<option value="TERMINAL">TERMINAL</option>
+						</select>
+						<button type="submit">Apply</button>
+					</form>
 					<div class="loader">
 						<img src="{% static 'spinner.svg' %}">
 					</div>

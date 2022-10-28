@@ -25,24 +25,46 @@ def home(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
 
-	orders = Swagger.filter('ORDERED', request.session['token'])
-	return render(request, 'home.html', {'orders': orders})
+	orders = Swagger.filter(request.session['token'], 'DELIVERY', 'PAYME')
+	products = Swagger.products(request.session['token'])
+	branches  = Swagger.branches(request.session['token'])
+	return render(request, 'home.html', {'orders': orders, 'products': products, 'branches': branches})
 
 
-def deliver(request):
+def filter(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
 
-	orders = Swagger.filter('DELIVER', request.session['token'])
-	return render(request, 'home.html', {'orders': orders})
+	orders = Swagger.filter(request.session['token'], request.GET['order-type'], request.GET['payment'])
+	products = Swagger.products(request.session['token'])
+	branches  = Swagger.branches(request.session['token'])
+	return render(
+		request,
+		'home.html',
+		{
+			'orders': orders,
+			'products': products,
+			'branches': branches,
+			'type': request.GET['order-type'],
+			'payment': request.GET['payment']
+		}
+	)
 
 
-def refuse(request):
+def create_order(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
 
-	orders = Swagger.filter('CANCELLED', request.session['token'])
-	return render(request, 'home.html', {'orders': orders})
+	Swagger.create_order(request.session['token'], request.POST)
+	return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+def update_order(request, order_id, status):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.updateOrder(request.session['token'], status, order_id)
+	return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 def categories(request):
@@ -112,14 +134,6 @@ def update_category(request, category_id):
 	return HttpResponseRedirect(reverse('categories'))
 
 
-def update_order(request, order_id, status):
-	if 'token' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
-
-	Swagger.updateOrder(request.session['token'], status, order_id)
-	return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-
 def users(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
@@ -132,8 +146,8 @@ def update_user(request, user_id):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
 
-	Swagger.users(request.session['token'])
-	return render(request, 'users.html', {'users': users})
+	Swagger.update_user(request.session['token'], request.POST, user_id)
+	return HttpResponseRedirect(reverse('users'))
 
 
 def fees(request):

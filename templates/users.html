@@ -11,17 +11,20 @@
 					<label for="#phone"><small>Phone Number</small></label>
 					<input required type="text" name="phone" id="phone" placeholder="998 XX XXX XX XX">
 					<label for="#role"><small>Role</small></label>
-					<select name="role" id="role" id="role">
+					<div class="add-form-user-roles"></div>
+					<select name="role" id="role" id="role" onchange="addRole(this)">
 						<option value="ADMIN">Administrator</option>
 						<option value="MANAGER">Manager</option>
 						<option value="OPERATOR">Operator</option>
 						<option value="USER">User</option>
 					</select>
+					<input type="hidden" id="user-roles" name="user-roles">
 					<button type="submit">Save</button>
 					{% csrf_token %}
 				</div>
 			</form>
 		</div>
+		<button id="call-form-button" style="display: none;"></button>
 		<div class="wrap">
 			<div class="sidebar">
 				<div class="sidemenu">
@@ -59,10 +62,10 @@
 							{% if users %}
 								{% for user in users %}
 									<tr onclick="userCard(this)">
-										<td><small>{{user.id}}</small></td>
+										<td><small class="user-id">{{user.id}}</small></td>
 										<td><small class="user-phone-number">{{user.phoneNumber}}</small></td>
 										<td><small class="user-first-name">{{user.firstName}}</small></td>
-										<td><small class="user-role">{{user.roles}}</small></td>
+										<td><small class="user-role">{{user.roles | user_roles}}</small></td>
 									</tr>
 								{% endfor %}
 							{% else %}

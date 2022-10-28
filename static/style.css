@@ -221,6 +221,28 @@ body{
 	grid-column: span 4;
 }
 
+.filters{
+	grid-column: span 2;
+	display: flex;
+	gap: 2vw;
+	align-items: center;
+	border-radius: 1.5vh;
+	background: white;
+	padding: 1.5vh 2vw;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.filters select{
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+.filters button{
+	border: 1px solid #eeeeee;
+	background: white;
+	padding: 1vh 1vw;
+	border-radius: 1vh;
+	cursor: pointer;
+}
 
 #call-form-button{
 	position: fixed;
@@ -296,6 +318,16 @@ body{
 	outline: none;
 	border-color: grey;
 }
+.add-form textarea{
+	padding: 1.5vh 1vw;
+	margin-top: 2vh;
+	border: 1px solid #eeeeee;
+	border-radius: 1.5vh;
+}
+.add-form textarea:focus{
+	outline: none;
+	border-color: grey;
+}
 .add-form select{
 	padding: 1.5vh 1vw;
 	margin-top: 2vh;
@@ -309,6 +341,20 @@ body{
 	border-radius: 1.5vh;
 	cursor: pointer;
 	margin-top: 2vh;
+}
+.add-form-user-roles{
+	margin: 1vh 0;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-row-gap: 1vh;
+	grid-column-gap: 1vw;
+}
+.add-form-user-roles small{
+	padding: .5vh;
+	border-radius: 10vh;
+	background: #eeeeee;
+	cursor: pointer;
+	text-align: center;
 }
 .order-manage{
 	display: flex;
@@ -335,5 +381,21 @@ body{
 	color: darkcyan;
 }
 .order-status-color-CANCELLED{
-	color: darkred;
+	color: red;
+}
+
+.order-manage button{
+	padding: 2vh 3vw;
+}
+
+.add-form-order-split{
+	display: flex;
+	gap: 1vh;
+}
+.add-form-order-split select{
+	flex: 10;
+}
+.add-form-order-split input{
+	flex: 1;
+	width: 4vw;
 }

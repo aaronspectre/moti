@@ -31,3 +31,8 @@ def todate(timestamp):
 @register.filter
 def safeorder(order):
 	return json.dumps(order)
+
+
+@register.filter
+def user_roles(roles):
+	return ' | '.join(roles)

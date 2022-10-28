@@ -28,22 +28,51 @@ class Swagger:
 
 
 	@staticmethod
+	def update_user(token, data, user_id):
+		data = {
+			'name': data['first_name'],
+			'roles': data['user-roles'].split(' | ')
+		}
+		response = requests.put(f'{ENDPOINT}user/admin/{user_id}', json = data, headers = {'Authorization': token})
+
+
+	@staticmethod
+	def create_order(token, data):
+		data = {
+			"addressId": int(data['address']),
+			"branchId": int(data['branch']),
+			"comment": data['comment'],
+			"deliveryTime": data['delivery'],
+			"distance": int(data['distance']),
+			"orderType": data['order-type'],
+			"paymeType": data['payment'],
+			"products": json.loads(data['orders'])
+		}
+		response = requests.post(f'{ENDPOINT}order', json = data, headers = {'Authorization': token})
+
+
+	@staticmethod
 	def updateOrder(token, status, order_id):
 		response = requests.put(f'{ENDPOINT}order/{order_id}', json = {'status': status}, headers = {'Authorization': token})
 
 
 	@staticmethod
-	def filter(status, token):
+	def filter(token, order_type, payment):
 		params = {
 			"direction": "ASC",
-			"method": "PAYME",
-			"orderType": "DELIVERY",
+			"method": payment,
+			"orderType": order_type,
 			"page": 0,
 			"size": 100,
 			"sortBy": ["createdAt"]
 		}
 		response = json.loads(requests.post(ENDPOINT+'order/all', json = params, headers = {'Authorization': token}).text)
 		return response
+
+
+	@staticmethod
+	def branches(token):
+		return json.loads(requests.get(f'{ENDPOINT}branch', headers = {'Authorization': token}).text)
 
 
 	@staticmethod
@@ -79,15 +108,24 @@ class Swagger:
 	@staticmethod
 	def createProduct(token, request, product_id = None, update = False):
 		boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
-		image = request.FILES['image']
-		image.open(mode = 'rb')
-		data = '{\n  "categoryId": '+request.POST['category']+',\n  "name": {\n    "uz": {\n      "lang": "uz",\n      "text": "'+request.POST['name_uz']+'"\n    },\n    "ru": {\n      "lang": "ru",\n      "text": "'+request.POST['name_ru']+'"\n    },\n    "eng": {\n      "lang": "eng",\n      "text": "'+request.POST['name_en']+'"\n    }\n  },\n  "discount": '+str(request.POST['discount'])+',\n  "description": {\n    "uz": {\n      "lang": "uz",\n      "text": "'+request.POST['desc_uz']+'"\n    },\n    "ru": {\n      "lang": "ru",\n      "text": "'+request.POST['desc_ru']+'"\n    },\n    "eng": {\n      "lang": "eng",\n      "text": "'+request.POST['desc_en']+'"\n    }\n  },\n  "price": '+str(request.POST['price'])+',\n  "readyTime": "'+str(request.POST['time'])+' min"\n}'
-		data = b''.join((f'--{boundary}\r\nContent-Disposition: form-data; name=request;\r\nContent-Type: application/json\r\n\r\n{data}\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T\r\nContent-Disposition: form-data; name=image; filename=Boys Cartoon Image.jpg\r\nContent-Type: image/jpeg\r\n\r\n'.encode(), image.read(), b'\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T--\r\n'))
 		if update:
-			response = requests.put(f'{ENDPOINT}product/{product_id}', data = data, headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+			data = '{\n  "categoryId": '+request.POST['category']+',\n  "name": {\n    "uz": {\n      "lang": "uz",\n      "text": "'+request.POST['name_uz']+'"\n    },\n    "ru": {\n      "lang": "ru",\n      "text": "'+request.POST['name_ru']+'"\n    },\n    "eng": {\n      "lang": "eng",\n      "text": "'+request.POST['name_en']+'"\n    }\n  },\n  "discount": '+str(request.POST['discount'])+',\n  "description": {\n    "uz": {\n      "lang": "uz",\n      "text": "'+request.POST['desc_uz']+'"\n    },\n    "ru": {\n      "lang": "ru",\n      "text": "'+request.POST['desc_ru']+'"\n    },\n    "eng": {\n      "lang": "eng",\n      "text": "'+request.POST['desc_en']+'"\n    }\n  },\n  "price": '+str(request.POST['price'])+',\n  "readyTime": "'+str(request.POST['time'])+' min"\n}'
+			if 'image' in request.FILES:
+				image = request.FILES['image']
+				image.open(mode = 'rb')
+				data = b''.join((f'--{boundary}\r\nContent-Disposition: form-data; name=request;\r\nContent-Type: application/json\r\n\r\n{data}\r\n--{boundary}\r\nContent-Disposition: form-data; name=image; filename=Boys Cartoon Image.jpg\r\nContent-Type: image/jpeg\r\n\r\n'.encode(), image.read(), b'\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T--\r\n'))
+				response = requests.put(f'{ENDPOINT}product/{product_id}', data = data, headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+				image.close()
+			else:
+				data = b''.join((f'--{boundary}\r\nContent-Disposition: form-data; name=request;\r\nContent-Type: application/json\r\n\r\n{data}'.encode(), b'\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T--\r\n'))
+				response = requests.put(f'{ENDPOINT}product/{product_id}', data = data, headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
 		else:
+			image = request.FILES['image']
+			image.open(mode = 'rb')
+			data = '{\n  "categoryId": '+request.POST['category']+',\n  "name": {\n    "uz": {\n      "lang": "uz",\n      "text": "'+request.POST['name_uz']+'"\n    },\n    "ru": {\n      "lang": "ru",\n      "text": "'+request.POST['name_ru']+'"\n    },\n    "eng": {\n      "lang": "eng",\n      "text": "'+request.POST['name_en']+'"\n    }\n  },\n  "discount": '+str(request.POST['discount'])+',\n  "description": {\n    "uz": {\n      "lang": "uz",\n      "text": "'+request.POST['desc_uz']+'"\n    },\n    "ru": {\n      "lang": "ru",\n      "text": "'+request.POST['desc_ru']+'"\n    },\n    "eng": {\n      "lang": "eng",\n      "text": "'+request.POST['desc_en']+'"\n    }\n  },\n  "price": '+str(request.POST['price'])+',\n  "readyTime": "'+str(request.POST['time'])+' min"\n}'
+			data = b''.join((f'--{boundary}\r\nContent-Disposition: form-data; name=request;\r\nContent-Type: application/json\r\n\r\n{data}\r\n--{boundary}\r\nContent-Disposition: form-data; name=image; filename=Boys Cartoon Image.jpg\r\nContent-Type: image/jpeg\r\n\r\n'.encode(), image.read(), b'\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T--\r\n'))
 			response = requests.post(ENDPOINT+'product', data = data, headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
-		image.close()
+			image.close()
 
 
 	@staticmethod

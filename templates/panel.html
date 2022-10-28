@@ -7,28 +7,28 @@
 			<div class="add-form-cover"></div>
 			<form action="{% url 'add_product' %}" method="post" class="add-product-form" enctype="multipart/form-data">
 				<div class="add-form-section">
-					<label for="#name"><small>Product Name</small></label>
+					<label for="name"><small>Product Name</small></label>
 					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
 					<input required type="text" name="name_ru" placeholder="Russian">
 					<input required type="text" name="name_en" placeholder="English">
+					<label for="image"><small>Product Image</small></label>
+					<input type="file" id="image" name="image" accept=".jpg, .jpeg">
 					{% csrf_token %}
 				</div>
 				<div class="add-form-section">
-					<label for="#name"><small>Description</small></label>
-					<input required type="text" id="name" name="desc_uz" placeholder="Uzbek">
-					<input required type="text" name="desc_ru" placeholder="Russian">
-					<input required type="text" name="desc_en" placeholder="English">
-					<label for="#image"><small>Product Image</small></label>
-					<input required type="file" id="image" name="image" accept=".jpg, .jpeg">
+					<label for="description"><small>Description</small></label>
+					<textarea required type="text" id="description" name="desc_uz" placeholder="Uzbek"></textarea>
+					<textarea required type="text" name="desc_ru" placeholder="Russian"></textarea>
+					<textarea required type="text" name="desc_en" placeholder="English"></textarea>
 				</div>
 				<div class="add-form-section">
-					<label for="#discount"><small>Discount</small></label>
+					<label for="discount"><small>Discount</small></label>
 					<input required type="number" id="discount" name="discount" placeholder="0.0">
-					<label for="#price"><small>Price</small></label>
+					<label for="price"><small>Price</small></label>
 					<input required type="number" id="price" name="price" placeholder="0.0">
-					<label for="#time"><small>Preparing Time (in minutes)</small></label>
+					<label for="time"><small>Preparing Time (in minutes)</small></label>
 					<input required type="number" id="time" name="time" placeholder="0">
-					<label for="#category"><small>Category</small></label>
+					<label for="category"><small>Category</small></label>
 					<select name="category" id="category">
 						{% for category in categories %}
 							<option value="{{category.id}}">{{category.categoryName.ru.text}}</option>

@@ -7,9 +7,9 @@ urlpatterns = [
 	path('auth', views.auth, name = 'auth'),
 
 	path('home', views.home, name = 'home'),
-	path('deliver', views.deliver, name = 'deliver'),
-	path('refuse', views.refuse, name = 'refuse'),
+	path('home/filter', views.filter, name = 'filter'),
 
+	path('home/order', views.create_order, name = 'create_order'),
 	path('update/<int:order_id>/<str:status>', views.update_order, name = 'update_order'),
 
 	path('products', views.products, name = 'products'),
