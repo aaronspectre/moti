@@ -175,6 +175,15 @@ body{
 	background: white;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+.order-body button{
+	background: white;
+	border: 1px solid #eeeeee;
+	border-radius: 1vh;
+	padding: 1vh 1vw;
+	font-size: 2.5vh;
+	cursor: pointer;
+	float: right;
+}
 .order-actions{
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -398,4 +407,32 @@ body{
 .add-form-order-split input{
 	flex: 1;
 	width: 4vw;
+}
+.subcategories{
+	width: 60%;
+	background: white;
+	padding: 4vh 3vw;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	position: relative;
+	text-align: center;
+	border-radius: 2vh;
+}
+.subcategories table{
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 1vh 3vh;
+	text-align: center;
+}
+.subcategories a{
+	text-decoration: none;
+	color: black;
+	padding: 1vh 2vw;
+	border-radius: 1vh;
+	border: 1px solid #eeeeee;
+}
+#parent{
+	display: none;
+}
+#loading{
+	display: none;
 }

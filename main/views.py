@@ -51,6 +51,38 @@ def filter(request):
 	)
 
 
+def branches(request):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	branches = Swagger.branches(request.session['token'])
+	return render(request, 'panel.html', {'branches': branches, 'show_add_branch': True})
+
+
+def add_branch(request):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.createBranch(request.session['token'], request)
+	return HttpResponseRedirect(reverse('branches'))
+
+
+def update_branch(request, branch_id):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.createBranch(request.session['token'], request, branch_id, True)
+	return HttpResponseRedirect(reverse('branches'))
+
+
+def delete_branch(request, branch_id):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.deleteBranch(request.session['token'], branch_id)
+	return HttpResponseRedirect(reverse('branches'))
+
+
 def create_order(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
@@ -71,7 +103,6 @@ def categories(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
 
-
 	categories = Swagger.categories(request.session['token'])
 	return render(request, 'panel.html', {'show_add_category': True, 'categories': categories})
 
@@ -89,7 +120,10 @@ def add_category(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
 
-	Swagger.createCategory(request.session['token'], (request.POST['name_uz'], request.POST['name_ru'], request.POST['name_en']))
+	if 'subcategory' in request.POST:
+		Swagger.createSubCategory(request.session['token'], request.POST)
+	else:
+		Swagger.createCategory(request.session['token'], (request.POST['name_uz'], request.POST['name_ru'], request.POST['name_en']))
 	return HttpResponseRedirect(reverse('categories'))
 
 
@@ -130,8 +164,19 @@ def update_category(request, category_id):
 		return HttpResponseRedirect(reverse('login'))
 
 	data = request.POST['name_uz'], request.POST['name_ru'], request.POST['name_en']
-	Swagger.createCategory(request.session['token'], data, category_id, True)
+	if 'subcategory' in request.POST:
+		Swagger.createSubCategory(request.session['token'], request.POST, category_id, True)
+	else:
+		Swagger.createCategory(request.session['token'], data, category_id, True)
 	return HttpResponseRedirect(reverse('categories'))
+
+
+def subcategories(request):
+	if 'token' not in request.session and 'ADMIN' not in request.session['roles']:
+		return HttpResponseRedirect(reverse('login'))
+
+	categories = Swagger.categories(request.session['token'])
+	return render(request, 'panel.html', {'show_add_category': True, 'categories': categories})
 
 
 def users(request):

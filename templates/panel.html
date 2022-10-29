@@ -44,18 +44,60 @@
 	{% elif show_add_category %}
 		<div class="add-form" id="add-form">
 			<div class="add-form-cover"></div>
+			<img src="{% static 'spinner.svg' %}" id="loading">
 			<form action="{% url 'add_category' %}" method="post" class="add-category-form">
 				<div class="add-form-section">
-					<label for="#name"><small>Cateogry Name</small></label>
+					<label for="#name"><small>Category Name</small></label>
 					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
 					<input required type="text" name="name_ru" placeholder="Russian">
 					<input required type="text" name="name_en" placeholder="English">
+					<div id="subcat">
+						<input type="checkbox" id="subcategory" name="subcategory" onchange="showParentSelector(this)">
+						<label for="subcategory"><small>Subcategory</small></label>
+					</div>
+					<select name="parent" id="parent" name="parent">
+						{% for category in categories %}
+							<option value="{{category.id}}">{{category.categoryName.eng.text}}</option>
+						{% endfor %}
+					</select>
 					<button type="submit">Save</button>
 					{% csrf_token %}
 				</div>
 			</form>
 		</div>
+
+		<div class="add-form" id="subcategory-panel">
+			<div class="add-form-cover" id="panel-cover"></div>
+			<div class="subcategories">
+				<img src="{% static 'spinner.svg' %}" id="spinner">
+				<table id="subcategory-table"></table>
+			</div>
+		</div>
+
 		<button id="call-form-button" data-link="{% url 'add_category' %}"><i class="fas fa-plus"></i></button>
+	{% elif show_add_branch %}
+		<div class="add-form" id="add-form">
+			<div class="add-form-cover"></div>
+			<form action="{% url 'add_branch' %}" method="post" class="add-category-form" enctype="multipart/form-data">
+				<div class="add-form-section">
+					<label for="#name"><small>Branch Name</small></label>
+					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
+					<input required type="text" name="name_ru" placeholder="Russian">
+					<input required type="text" name="name_en" placeholder="English">
+					<label for="#phone"><small>Contacts</small></label>
+					<input required type="text" id="phone" name="phone" placeholder="998xxxxxxxxx">
+					<label for="#capacity"><small>Capacity</small></label>
+					<input required type="text" id="capacity" name="capacity" placeholder="0">
+					<label for="#target"><small>Target</small></label>
+					<input required type="text" id="target" name="target" placeholder="Target">
+					<label for="#image"><small>Image</small></label>
+					<input type="file" id="image" name="image">
+					<button type="submit">Save</button>
+					{% csrf_token %}
+				</div>
+			</form>
+		</div>
+		<button id="call-form-button" data-link="{% url 'add_branch' %}"><i class="fas fa-plus"></i></button>
 	{% endif %}
 		<div class="wrap">
 			<div class="sidebar">
@@ -66,6 +108,7 @@
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
+						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
 						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
 						{% endif %}
@@ -102,9 +145,10 @@
 						{% endfor %}
 					{% elif show_add_category %}
 						{% for category in categories %}
+							{% if category.subcategoryId is None %}
 							<div class="order">
 								<div class="order-body">
-									<strong>id: {{category.id}}</strong>
+									<strong><button onclick="showChildren(`{{request.session.token}}`, this)" data-id="{{category.id}}"><i class="fal fa-list-timeline"></i></button>id: {{category.id}}</strong>
 									<p><b>Uz:</b>&ensp;<span class="card-name-uz">{{category.categoryName.uz.text}}</span></p>
 									<p><b>Ru:</b>&ensp;<span class="card-name-ru">{{category.categoryName.ru.text}}</span></p>
 									<p><b>En:</b>&ensp;<span class="card-name-en">{{category.categoryName.eng.text}}</span></p>
@@ -112,6 +156,27 @@
 								<div class="order-actions">
 									<a href="{% url 'delete_category' category.id %}"><small><i class="fal fa-trash"></i>&ensp;Remove</small></a>
 									<a href="javascript:void(0);" onclick="editCategory(this, `{% url 'update_category' category.id %}`)"><small><i class="fal fa-pen-to-square"></i>&ensp;Edit</small></a>
+								</div>
+							</div>
+							{% endif %}
+						{% endfor %}
+					{% elif show_add_branch %}
+						{% for branch in branches %}
+							<div class="order">
+								<div class="order-body">
+									<img src="{{branch.imageUrl.0}}">
+									<small>En:&ensp;<b id="branch-name-en">{{branch.information.eng.text}}</b></small><br>
+									<small>Uz:&ensp;<b id="branch-name-uz">{{branch.information.uz.text}}</b></small><br>
+									<small>Ru:&ensp;<b id="branch-name-ru">{{branch.information.ru.text}}</b></small><br>
+									<p><i class="fal fa-hashtag"></i>&ensp;<small id="branch-id">{{branch.id}}</small></p>
+									<p><i class="fal fa-location-dot"></i>&ensp;<small id="branch-address">{{branch.addressId}}</small></p>
+									<p><i class="fal fa-phone"></i>&ensp;<small id="branch-phone">{{branch.contacts}}</small></p>
+									<p><i class="fal fa-people"></i>&ensp;<small id="branch-capacity">{{branch.capacity}}</small></p>
+									<p><i class="fal fa-circle-info"></i>&ensp;<small id="branch-target">{{branch.target}}</small></p>
+								</div>
+								<div class="order-actions">
+									<a href="{% url 'delete_branch' branch.id %}"><small><i class="fal fa-trash"></i>&ensp;Remove</small></a>
+									<a href="javascript:void(0);" onclick="editBranch(this, `{% url 'update_branch' branch.id %}`)"><small><i class="fal fa-pen-to-square"></i>&ensp;Edit</small></a>
 								</div>
 							</div>
 						{% endfor %}

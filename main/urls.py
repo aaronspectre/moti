@@ -29,5 +29,10 @@ urlpatterns = [
 	path('fees/add', views.add_fee, name = 'add_fee'),
 	path('fees/update/<int:fee_id>', views.update_fee, name = 'update_fee'),
 
+	path('branches', views.branches, name = 'branches'),
+	path('branch/create', views.add_branch, name = 'add_branch'),
+	path('branch/edit/<int:branch_id>', views.update_branch, name = 'update_branch'),
+	path('branch/delete/<int:branch_id>', views.delete_branch, name = 'delete_branch'),
+
 	path('logout', views.logout, name = 'logout'),
 ]
