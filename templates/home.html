@@ -92,7 +92,7 @@
 					<label for="#branch"><small>Branch</small></label>
 					<select name="branch" id="branch">
 						{% for branch in branches %}
-							<option value="{{branch.id}}">{{branch.information}}</option>
+							<option value="{{branch.id}}">{{branch.information.eng.text}}</option>
 						{% endfor %}
 					</select>
 					<label for="#order-type"><small>Order Type</small></label>

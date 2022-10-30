@@ -15,11 +15,12 @@
 <body>
 	<div class="wrap">
 		<div class="login-form">
+			<img src="{% static 'moti.svg' %}" alt="Logo">
 			<h3>Authorization</h3>
 			<form action="{% url 'auth' %}" method="post">
-				<input type="text" placeholder="Username" name="username">
-				<input type="password" placeholder="Password" name="password">
-				<input type="submit" value="Login">
+				<input required type="text" placeholder="Username" name="username">
+				<input required type="password" placeholder="Password" name="password">
+				<input type="submit" value="Login" id="submit-button">
 				{% csrf_token %}
 			</form>
 		</div>

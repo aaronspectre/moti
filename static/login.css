@@ -19,6 +19,10 @@ body{
 	width: 20%;
 	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+.login-form img{
+	width: 30%;
+	margin: 5vh 0;
+}
 form{
 	padding: 2vh;
 	background: white;
@@ -34,4 +38,9 @@ form input{
 form input:focus{
 	outline: none;
 	border-color: black;
+}
+#submit-button{
+	background: #F65A83;
+	color: white;
+	cursor: pointer;
 }

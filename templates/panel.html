@@ -57,7 +57,9 @@
 					</div>
 					<select name="parent" id="parent" name="parent">
 						{% for category in categories %}
-							<option value="{{category.id}}">{{category.categoryName.eng.text}}</option>
+							{% if category.subcategoryId is None %}
+								<option value="{{category.id}}">{{category.categoryName.eng.text}}</option>
+							{% endif %}
 						{% endfor %}
 					</select>
 					<button type="submit">Save</button>

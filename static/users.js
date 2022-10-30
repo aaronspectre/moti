@@ -51,7 +51,6 @@ function userCard(card){
 	)
 
 	form.querySelector('#name').value = card.querySelector('.user-first-name').innerText
-	form.querySelector('#phone').value = card.querySelector('.user-phone-number').innerText
 	form.querySelector('#user-roles').value = card.querySelector('.user-role').innerText
 
 	appendRoles(card.querySelector('.user-role').innerText.split(' | '))
