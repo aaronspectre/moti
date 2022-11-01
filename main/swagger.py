@@ -2,7 +2,7 @@ import json
 import requests
 
 
-ENDPOINT = 'http://drogrammer.uz/api/v1/'
+ENDPOINT = 'http://admin.motitashkent.uz/api/v1/'
 
 class Swagger:
 	@staticmethod
