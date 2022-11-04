@@ -11,6 +11,7 @@ def login(request):
 		return HttpResponseRedirect(reverse('home'))
 	return render(request, 'login.html')
 
+
 def auth(request):
 	response = Swagger.auth(request.POST['username'], request.POST['password'])
 	if response['statusCodeValue'] == 200:
@@ -22,13 +23,17 @@ def auth(request):
 
 
 def home(request):
-	if 'token' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
+	try:
+		if 'token' not in request.session:
+			return HttpResponseRedirect(reverse('login'))
 
-	orders = Swagger.filter(request.session['token'], 'DELIVERY', 'PAYME')
-	products = Swagger.products(request.session['token'])
-	branches  = Swagger.branches(request.session['token'])
-	return render(request, 'home.html', {'orders': orders, 'products': products, 'branches': branches})
+		orders = Swagger.filter(request.session['token'], 'DELIVERY', 'PAYME')
+		products = Swagger.products(request.session['token'])
+		branches  = Swagger.branches(request.session['token'])
+		return render(request, 'home.html', {'orders': orders, 'products': products, 'branches': branches})
+	except Exception as e:
+		del request.session['token']
+		return HttpResponseRedirect(reverse('login'))
 
 
 def filter(request):

@@ -15,6 +15,8 @@ call_form_button.addEventListener('click', event => {
 	input.querySelector("[name = 'name_ru']").value = ''
 	input.querySelector("[name = 'name_en']").value = ''
 
+	input.querySelector("[name = 'image']").setAttribute('required', '')
+
 	try{
 		input.querySelector("[name = 'capacity']").value = ''
 		input.querySelector("[name = 'phone']").value = ''
@@ -29,6 +31,7 @@ call_form_button.addEventListener('click', event => {
 form_cover.addEventListener('click', event => {
 	form.style.display = 'none';
 	form.style.opacity = 0
+	input.querySelector("[name = 'image']").removeAttribute('required')
 })
 panel_cover.addEventListener('click', event => {
 	panel = document.getElementById('subcategory-panel')
