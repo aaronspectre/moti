@@ -113,7 +113,7 @@ function editSubCategory(id, link, token){
 	document.getElementById('loading').style.display = 'initial'
 
 	fetch(
-		`http://drogrammer.uz/api/v1/category/${id}`,
+		`http://admin.motitashkent.uz/api/v1/category/${id}`,
 		{
 			headers: {
 				'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ function showChildren(token, button){
 	`
 
 	fetch(
-		`http://drogrammer.uz/api/v1/category/category?categoryId=${button.getAttribute('data-id')}`,
+		`http://admin.motitashkent.uz/api/v1/category/category?categoryId=${button.getAttribute('data-id')}`,
 		{
 			headers: {
 				'Content-Type': 'application/json',
