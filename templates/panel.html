@@ -31,7 +31,7 @@
 					<label for="category"><small>Category</small></label>
 					<select name="category" id="category">
 						{% for category in categories %}
-							<option value="{{category.id}}">{{category.categoryName.ru.text}}</option>
+							<option value="{{category.id}}">{{category.name.ru}}</option>
 						{% endfor %}
 					</select>
 				</div>
@@ -57,8 +57,8 @@
 					</div>
 					<select name="parent" id="parent" name="parent">
 						{% for category in categories %}
-							{% if category.subcategoryId is None %}
-								<option value="{{category.id}}">{{category.categoryName.eng.text}}</option>
+							{% if 'parentCategoryId' not in category %}
+								<option value="{{category.id}}">{{category.name.en}}</option>
 							{% endif %}
 						{% endfor %}
 					</select>
@@ -131,13 +131,13 @@
 							<div class="order">
 								<div class="order-body">
 									<img src="{{product.imageUrl}}" alt="{{product.productName.ru.text}}">
-									<strong>{{product.productName.ru.text}}</strong>
-									<p><i class="fal fa-list-timeline"></i>&ensp;{{product.category}}</p>
+									<strong>{{product.name.ru}}</strong>
+									<p><i class="fal fa-list-timeline"></i>&ensp;{{product.categoryId}}</p>
 									<p><i class="fal fa-circle-dollar"></i>&ensp;{{product.price}} sum</p>
 									<p><i class="fal fa-receipt"></i>&ensp;{{product.discount}}</p>
 									<p><i class="fal fa-clock"></i>&ensp;{{product.readyTime}}</p>
 									<p><i class="fal fa-hashtag"></i>&ensp;{{product.id}}</p>
-									<p><small>{{product.description.ru.text}} </small></p>
+									<p><small>{{product.description.ru}} </small></p>
 								</div>
 								<div class="order-actions">
 									<a href="{% url 'delete_product' product.id %}"><small><i class="fal fa-trash"></i>&ensp;Remove</small></a>
@@ -147,13 +147,13 @@
 						{% endfor %}
 					{% elif show_add_category %}
 						{% for category in categories %}
-							{% if category.subcategoryId is None %}
+							{% if 'parentCategoryId' not in category %}
 							<div class="order">
 								<div class="order-body">
 									<strong><button onclick="showChildren(`{{request.session.token}}`, this)" data-id="{{category.id}}"><i class="fal fa-list-timeline"></i></button>id: {{category.id}}</strong>
-									<p><b>Uz:</b>&ensp;<span class="card-name-uz">{{category.categoryName.uz.text}}</span></p>
-									<p><b>Ru:</b>&ensp;<span class="card-name-ru">{{category.categoryName.ru.text}}</span></p>
-									<p><b>En:</b>&ensp;<span class="card-name-en">{{category.categoryName.eng.text}}</span></p>
+									<p><b>Uz:</b>&ensp;<span class="card-name-uz">{{category.name.uz}}</span></p>
+									<p><b>Ru:</b>&ensp;<span class="card-name-ru">{{category.name.ru}}</span></p>
+									<p><b>En:</b>&ensp;<span class="card-name-en">{{category.name.en}}</span></p>
 								</div>
 								<div class="order-actions">
 									<a href="{% url 'delete_category' category.id %}"><small><i class="fal fa-trash"></i>&ensp;Remove</small></a>
@@ -166,12 +166,10 @@
 						{% for branch in branches %}
 							<div class="order">
 								<div class="order-body">
-									<img src="{{branch.imageUrl.0}}">
-									<small>En:&ensp;<b id="branch-name-en">{{branch.information.eng.text}}</b></small><br>
-									<small>Uz:&ensp;<b id="branch-name-uz">{{branch.information.uz.text}}</b></small><br>
-									<small>Ru:&ensp;<b id="branch-name-ru">{{branch.information.ru.text}}</b></small><br>
+									<img src="{{branch.imageUrl}}">
+									<small>Ru:&ensp;<b id="branch-name-ru">{{branch.information.ru}}</b></small><br>
 									<p><i class="fal fa-hashtag"></i>&ensp;<small id="branch-id">{{branch.id}}</small></p>
-									<p><i class="fal fa-location-dot"></i>&ensp;<small id="branch-address">{{branch.addressId}}</small></p>
+									<p><i class="fal fa-location-dot"></i>&ensp;<small id="branch-address">{{branch.address.name}}</small></p>
 									<p><i class="fal fa-phone"></i>&ensp;<small id="branch-phone">{{branch.contacts}}</small></p>
 									<p><i class="fal fa-people"></i>&ensp;<small id="branch-capacity">{{branch.capacity}}</small></p>
 									<p><i class="fal fa-circle-info"></i>&ensp;<small id="branch-target">{{branch.target}}</small></p>

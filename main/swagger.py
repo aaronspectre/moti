@@ -7,8 +7,8 @@ ENDPOINT = 'http://admin.motitashkent.uz/api/v1/'
 class Swagger:
 	@staticmethod
 	def auth(username, password):
-		data = {'phonenumber': username, 'password': password}
-		response = json.loads(requests.post(ENDPOINT+'auth/login_admin', json = data).text)
+		data = '{\n    \"phone\": \"'+username+'\",\n    \"password\": \"'+password+'\"\n}'
+		response = json.loads(requests.post(ENDPOINT+'auth/login', data = data, headers = {'Content-Type': 'application/json'}).text)
 		return response
 
 
@@ -66,7 +66,7 @@ class Swagger:
 			"size": 100,
 			"sortBy": ["createdAt"]
 		}
-		response = json.loads(requests.post(ENDPOINT+'order/all', json = params, headers = {'Authorization': token}).text)
+		response = json.loads(requests.get(ENDPOINT+'order', params = params, headers = {'Authorization': token}).text)
 		return response
 
 
@@ -110,8 +110,8 @@ class Swagger:
 			'sort.unsorted': 'false',
 			'unpaged': 'false',
 		}
-		response = json.loads(requests.get(ENDPOINT+'category/page', params = params, headers = {'Authorization': token}).text)
-		return response['content']
+		response = json.loads(requests.get(ENDPOINT+'category/admin', params = params, headers = {'Authorization': token}).text)
+		return response
 
 
 	@staticmethod
@@ -139,13 +139,11 @@ class Swagger:
 
 	@staticmethod
 	def createCategory(token, raw, category_id = None, update = False):
-		boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
-		data = '{\n    "categoryName": {\n      "uz": {\n        "lang": "uz",\n        "text": '+f'"{raw[0]}"'+'\n},\n      "ru": {\n        "lang": "ru",\n        "text": '+f'"{raw[1]}"'+'\n      },\n      "eng": {\n        "lang": "eng",\n        "text": '+f'"{raw[2]}"'+'\n      }\n    }\n  }'
-		data = f"""--{boundary}\r\nContent-Disposition: form-data; name=categoryCreateRequest;\r\nContent-Type: application/json\r\n\r\n{data}\r\n--{boundary}--\r\n"""
+		data = '{\n  \"name\": {\n    \"en\": \"'+raw[2]+'\",\n    \"ru\": \"'+raw[1]+'\",\n    \"uz\": \"'+raw[0]+'\"\n  }\n}'
 		if update:
-			response = requests.put(f'{ENDPOINT}category/{category_id}', data = data.encode(), headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+			response = requests.put(f'{ENDPOINT}category/admin/{category_id}', data = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
 		else:
-			response = requests.post(ENDPOINT+'category', data = data.encode(), headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+			response = requests.post(ENDPOINT+'category/admin', data = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
 
 
 	@staticmethod
@@ -175,13 +173,11 @@ class Swagger:
 
 	@staticmethod
 	def createSubCategory(token, raw, category_id = None, update = False):
-		boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
-		data = '{\n    "subcategoryId": '+f"\"{raw['parent']}\""+',\n    "categoryName": {\n      "uz": {\n        "lang": "uz",\n        "text": '+f"\"{raw['name_uz']}\""+'\n},\n      "ru": {\n        "lang": "ru",\n        "text": '+f"\"{raw['name_ru']}\""+'\n      },\n      "eng": {\n        "lang": "eng",\n        "text": '+f"\"{raw['name_en']}\""+'\n      }\n    }\n  }'
-		data = f"""--{boundary}\r\nContent-Disposition: form-data; name=categoryCreateRequest;\r\nContent-Type: application/json\r\n\r\n{data}\r\n--{boundary}--\r\n"""
+		data = '{\n  \"name\": {\n    \"en\": \"'+raw['name_en']+'\",\n    \"ru\": \"'+raw['name_ru']+'\",\n    \"uz\": \"'+raw['name_uz']+'\"\n  },\n  \"parentCategoryId\": '+raw['parent']+'\n}'
 		if update:
-			response = requests.put(f'{ENDPOINT}category/{category_id}', data = data.encode(), headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+			response = requests.put(f'{ENDPOINT}category/admin/{category_id}', data = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
 		else:
-			response = requests.post(ENDPOINT+'category', data = data.encode(), headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+			response = requests.post(ENDPOINT+'category/admin', data = data.encode(), headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
 
 
 	@staticmethod
@@ -191,7 +187,7 @@ class Swagger:
 
 	@staticmethod
 	def deleteCategory(token, category_id):
-		response = requests.delete(ENDPOINT+'category/'+str(category_id), headers = {'Authorization': token})
+		response = requests.delete(ENDPOINT+'category/admin/'+str(category_id), headers = {'Authorization': token})
 
 
 	@staticmethod

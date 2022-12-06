@@ -66,17 +66,17 @@ function editProduct(card, link, id){
 	input = form.querySelector('form')
 	input.setAttribute('action', link)
 
-	input.querySelector("[name = 'name_uz']").value = product['productName']['uz']['text']
-	input.querySelector("[name = 'name_ru']").value = product['productName']['ru']['text']
-	input.querySelector("[name = 'name_en']").value = product['productName']['eng']['text']
+	input.querySelector("[name = 'name_uz']").value = product['name']['uz']
+	input.querySelector("[name = 'name_ru']").value = product['name']['ru']
+	input.querySelector("[name = 'name_en']").value = product['name']['en']
 
-	input.querySelector("[name = 'desc_uz']").value = product['description']['uz']['text']
-	input.querySelector("[name = 'desc_ru']").value = product['description']['ru']['text']
-	input.querySelector("[name = 'desc_en']").value = product['description']['eng']['text']
+	input.querySelector("[name = 'desc_uz']").value = product['description']['uz']
+	input.querySelector("[name = 'desc_ru']").value = product['description']['ru']
+	input.querySelector("[name = 'desc_en']").value = product['description']['en']
 
 	input.querySelector("[name = 'discount']").value = product['discount']
 	input.querySelector("[name = 'price']").value = product['price']
-	input.querySelector("[name = 'time']").value = Number(product['readyTime'].replace('min', ''))
+	input.querySelector("[name = 'time']").value = product['readyTime']
 }
 
 function editBranch(card, link){
@@ -113,7 +113,7 @@ function editSubCategory(id, link, token){
 	document.getElementById('loading').style.display = 'initial'
 
 	fetch(
-		`http://admin.motitashkent.uz/api/v1/category/${id}`,
+		`http://admin.motitashkent.uz/api/v1/category/admin/${id}`,
 		{
 			headers: {
 				'Content-Type': 'application/json',
@@ -121,9 +121,10 @@ function editSubCategory(id, link, token){
 			}
 		}
 	).then(response => response.json()).then(data => {
-		input.querySelector("[name = 'name_uz']").value = data.categoryName.uz.text
-		input.querySelector("[name = 'name_ru']").value = data.categoryName.ru.text
-		input.querySelector("[name = 'name_en']").value = data.categoryName.eng.text
+		console.log(data)
+		input.querySelector("[name = 'name_uz']").value = data.name.uz
+		input.querySelector("[name = 'name_ru']").value = data.name.ru
+		input.querySelector("[name = 'name_en']").value = data.name.en
 
 		document.getElementById('loading').style.display = 'none'
 		input.style.display = 'block'
@@ -131,7 +132,7 @@ function editSubCategory(id, link, token){
 		document.getElementById('subcat').style.display = 'initial'
 		document.getElementById('subcategory').checked = true
 		document.getElementById('parent').style.display = 'initial'
-		document.getElementById('parent').value = data.subcategoryId
+		document.getElementById('parent').value = data.parentCategoryId
 	})
 }
 
@@ -153,7 +154,7 @@ function showChildren(token, button){
 	`
 
 	fetch(
-		`http://admin.motitashkent.uz/api/v1/category/category?categoryId=${button.getAttribute('data-id')}`,
+		`http://admin.motitashkent.uz/api/v1/category/category?id=${button.getAttribute('data-id')}`,
 		{
 			headers: {
 				'Content-Type': 'application/json',
@@ -165,7 +166,7 @@ function showChildren(token, button){
 			child += `
 				<tr>
 					<td>${category.id}</td>
-					<td>${category.parentId}</td>
+					<td>${category.parentCategoryId}</td>
 					<td>${category.name}</td>
 					<td>
 						<a href="javascript:void(0);" onclick="editSubCategory(${category.id}, '${window.location.origin}/categories/update/${category.id}', '${token}')"><i class="fal fa-pen-to-square"></i>&ensp;<small>Edit</small></a>

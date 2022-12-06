@@ -14,9 +14,9 @@ def login(request):
 
 def auth(request):
 	response = Swagger.auth(request.POST['username'], request.POST['password'])
-	if response['statusCodeValue'] == 200:
-		request.session['token'] = response['body']['token']
-		request.session['roles'] = response['body']['roles']
+	if 'token' in response:
+		request.session['token'] = "Bearer " + response['token']['token']
+		request.session['roles'] = response['role']
 		return HttpResponseRedirect(reverse('home'))
 	else:
 		return HttpResponseRedirect(reverse('login'))
@@ -32,6 +32,7 @@ def home(request):
 		branches  = Swagger.branches(request.session['token'])
 		return render(request, 'home.html', {'orders': orders, 'products': products, 'branches': branches})
 	except Exception as e:
+		print(e)
 		del request.session['token']
 		return HttpResponseRedirect(reverse('login'))
 
