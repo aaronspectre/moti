@@ -2,49 +2,52 @@ import http.client
 import mimetypes
 from codecs import encode
 
-conn = http.client.HTTPSConnection("{{host1}}ranch")
+conn = http.client.HTTPConnection("admin.motitashkent.uz")
 dataList = []
 boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
 dataList.append(encode('--' + boundary))
-dataList.append(encode('Content-Disposition: form-data; name=request;'))
+dataList.append(encode('Content-Disposition: form-data; name=product;'))
 
 dataList.append(encode('Content-Type: {}'.format('application/json')))
 dataList.append(encode(''))
 
 dataList.append(encode("""{
-    \"addressId\": 1,
-    \"capacity\": 12128,
-    \"contacts\": \"8987edit 783116728\",
-    \"deletedImages\": [
-      \"https://firebasestorage.googleapis.com/v0/b/collectin-3959d.appspot.com/o/23e0d1ea-d9d3-4736-97e5-23d8c895d205Screen+Shot+2022-09-16+at+12.39.36.png?alt=media\",
-      \"https://firebasestorage.googleapis.com/v0/b/collectin-3959d.appspot.com/o/f736f58d-8f19-40d1-a3c8-7a22691d8d39Screen+Shot+2022-09-16+at+12.39.39.png?alt=media\",
-      \"https://firebasestorage.googleapis.com/v0/b/collectin-3959d.appspot.com/o/ffca292b-3032-4728-9c32-7384d01a13a6Screen+Shot+2022-09-16+at+12.39.41.png?alt=media\"
-    ],
-    \"information\": {
-      \"uz\": {
-        \"lang\": \"uz\",
-        \"text\": \"oybek edit  m11111euhca\"
-      },
-      \"ru\": {
-        \"lang\": \"ru\",
-        \"text\": \"11111  edit sub\"
-      },
-      \"eng\": {
-        \"lang\": \"eng\",
-        \"text\": \"ingli111zcecweec edit   sub\"
-      }
-    },
-    \"target\": \"oybek111 edit  metro \"
-  }"""))
+  \"available\": true,
+  \"categoryId\": 2,
+  \"code\": \"string\",
+  \"description\": {
+    \"en\": \"string\",
+    \"ru\": \"string\",
+    \"uz\": \"string\"
+  },
+  \"discount\": 0,
+  \"name\": {
+    \"en\": \"string\",
+    \"ru\": \"string\",
+    \"uz\": \"string\"
+  },
+  \"price\": 1200,
+  \"readyTime\": 10
+}"""))
+dataList.append(encode('--' + boundary))
+dataList.append(encode('Content-Disposition: form-data; name=image; filename={0}'.format('image.png')))
+
+fileType = mimetypes.guess_type('/home/fedora/Downloads/image.png')[0] or 'application/octet-stream'
+dataList.append(encode('Content-Type: {}'.format(fileType)))
+dataList.append(encode(''))
+
+with open('/home/fedora/Downloads/image.png', 'rb') as f:
+  dataList.append(b'image')
 dataList.append(encode('--'+boundary+'--'))
 dataList.append(encode(''))
 body = b'\r\n'.join(dataList)
-print(body)
-# payload = body
-# headers = {
-#    'Content-type': 'multipart/form-data; boundary={}'.format(boundary) 
-# }
-# conn.request("PUT", "/admin/1", payload, headers)
+payload = body
+headers = {
+   'Content-type': 'multipart/form-data; boundary={}'.format(boundary),
+   'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI5OTg5NzYzMzE4MDkiLCJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9XSwiaWF0IjoxNjcwNDA3NzkwLCJleHAiOjE2NzA0OTQxOTB9.rJFkC22764wTiRfgQZNNlE3jH496NPKFLE7egHXQ0bq7PfvidvybikYZZtwLim3BuxKgHSQelB-YwhKdKArbXg'
+}
+print(payload.decode())
+# conn.request("POST", "/api/v1/product/admin", payload, headers)
 # res = conn.getresponse()
 # data = res.read()
 # print(data.decode("utf-8"))

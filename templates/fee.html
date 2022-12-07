@@ -16,8 +16,6 @@
 			</form>
 		</div>
 
-		<button id="call-form-button" data-link="{% url 'add_fee' %}"><i class="fas fa-plus"></i></button>
-
 		<div class="wrap">
 			<div class="sidebar">
 				<div class="sidemenu">
@@ -25,9 +23,11 @@
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
 						{% if 'ADMIN' in request.session.roles %}
+						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
+						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
 						{% endif %}
 						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
@@ -47,18 +47,14 @@
 					<div class="users-board">
 						<table class="order-table" border="0" cellspacing="0">
 							<tr class="order-table-head">
-								<td>ID</td>
 								<td>Price</td>
 								<td>Payment</td>
 							</tr>
-							{% if fees %}
-								{% for fee in fees %}
-									<tr onclick="feeCard(this)">
-										<td><small class="fee-id">{{fee.id}}</small></td>
-										<td><small class="fee-price">{{fee.price}}</small></td>
-										<td><small class="fee-payment">{{fee.deliveryPayment}}</small></td>
-									</tr>
-								{% endfor %}
+							{% if fee %}
+								<tr onclick="feeCard(this)">
+									<td><small class="fee-price">{{fee.price}}</small></td>
+									<td><small class="fee-payment">{{fee.deliveryPayment}}</small></td>
+								</tr>
 							{% else %}
 								<tr>
 									<p><small>No fees are available</small></p>

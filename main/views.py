@@ -22,6 +22,19 @@ def auth(request):
 		return HttpResponseRedirect(reverse('login'))
 
 
+def charts(request):
+	report = Swagger.report(request.session['token'])
+	most_selling = Swagger.report_most_selling(request.session['token'])
+	payment_methods = Swagger.report_payment_methods(request.session['token'])
+	last_30_orders = Swagger.report_last_30_orders(request.session['token'])
+	return render(request, 'charts.html', {
+		'report': report,
+		'most_selling': most_selling,
+		'payment_methods': payment_methods,
+		'last_30_orders': last_30_orders
+	})
+
+
 def home(request):
 	try:
 		if 'token' not in request.session:
@@ -205,23 +218,15 @@ def fees(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
 
-	fees = Swagger.fees(request.session['token'])
-	return render(request, 'fee.html', {'fees': fees})
+	fee = Swagger.fees(request.session['token'])
+	return render(request, 'fee.html', {'fee': fee})
 
 
-def add_fee(request):
+def update_fee(request):
 	if 'token' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
 
-	Swagger.add_fee(request.session['token'], request.POST)
-	return HttpResponseRedirect(reverse('fees'))
-
-
-def update_fee(request, fee_id):
-	if 'token' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
-
-	Swagger.update_fee(request.session['token'], fee_id, request.POST)
+	Swagger.update_fee(request.session['token'], request.POST)
 	return HttpResponseRedirect(reverse('fees'))
 
 

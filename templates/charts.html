@@ -1,0 +1,100 @@
+{% extends 'home.html' %}
+{% load static %}
+{% load filters %}
+{% block content %}
+	<div class="wrap">
+			<div class="sidebar">
+				<div class="sidemenu">
+					<img src="{% static 'moti.svg' %}" alt="logo">
+					<ul>
+						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
+						{% if 'ADMIN' in request.session.roles %}
+						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
+						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
+						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
+						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
+						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
+						{% endif %}
+						{% if 'MANAGER' in request.session.roles %}
+						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+			<div class="content">
+				<div class="navbar">
+					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+				</div>
+				<div id="charts">
+					<section id="stat-cards">
+						<div class="stat-card">
+							<i class="fal fa-users"></i>
+							<h1>{{report.users}}</h1>
+							<small>Total users</small>
+						</div>
+						<div class="stat-card">
+							<i class="fal fa-calendar-circle-user"></i>
+							<h1>{{report.dailyUsers}}</h1>
+							<small>Daily users</small>
+						</div>
+						<div class="stat-card">
+							<i class="fal fa-truck-fast"></i>
+							<h1>{{report.orders}}</h1>
+							<small>Total orders</small>
+						</div>
+						<div class="stat-card">
+							<i class="fal fa-calendar-lines-pen"></i>
+							<h1>{{report.dailyOrders}}</h1>
+							<small>Daily orders</small>
+						</div>
+						<div class="stat-card">
+							<i class="fal fa-calendar-days"></i>
+							<h1>{{report.monthlyOrders}}</h1>
+							<small>Monthly orders</small>
+						</div>
+						<div class="stat-card">
+							<i class="fal fa-money-bill-trend-up"></i>
+							<h1>{{report.dailyMoney}}</h1>
+							<small>Daily income</small>
+						</div>
+						<div class="stat-card">
+							<i class="fal fa-sack-dollar"></i>
+							<h1>{{report.monthlyMoney}}</h1>
+							<small>Monthly income</small>
+						</div>
+					</section>
+					<section id="chart-section">
+						<div class="chart-container">
+							<h4>The most selling products</h4>
+							<div class="chart" id="most-selling-chart"></div>
+						</div>
+						<div class="chart-container">
+							<h4>Payment methods<br><small><u>Total: {{payment_methods.total}}</u></small></h4>
+							<div class="chart" id="payment-methods-chart"></div>
+						</div>
+						<div class="chart-container" style="grid-column: span 2;">
+							<h4>Last 30 daily orders</h4>
+							<div class="chart" id="last-30-orders-chart"></div>
+						</div>
+					</section>
+					<section id="download-report">
+						<form action="" method="post">
+							<label for="start">Start:&ensp;</label>
+							<input type="date" name="start">
+							<label for="end">End:&ensp;</label>
+							<input type="date" name="end">
+							<div>
+								<button>Download</button>
+							</div>
+						</form>
+					</section>
+				</div>
+			</div>
+		</div>
+		<script src="{% static 'charts.js' %}"></script>
+		<script>
+			mostSelling({{most_selling | safe}})
+			paymentMethods({{payment_methods | safe}})
+			last30Orders({{last_30_orders | safe}})
+		</script>
+{% endblock %}

@@ -10,7 +10,7 @@ form_cover.addEventListener('click', event => {
 	form.querySelectorAll('.add-form-user-roles small').forEach(item => item.remove())
 })
 
-
+try{
 call_button.addEventListener('click', event => {
 	form.style.display = 'flex'
 	form.style.opacity = 1
@@ -24,6 +24,7 @@ call_button.addEventListener('click', event => {
 	form.querySelector('#payment').value = ''
 	form.querySelector('#user-roles').value = ''
 })
+} catch{}
 
 
 function appendRoles(roles){
@@ -68,10 +69,7 @@ function addRole(role){
 function feeCard(card){
 	form.style.display = 'flex'
 	form.style.opacity = 1
-	form.querySelector('.add-category-form').setAttribute(
-		'action',
-		`${window.location.origin}/fees/update/${card.querySelector('.fee-id').innerText}`
-	)
+	form.querySelector('.add-category-form').setAttribute('action', `${window.location.origin}/fees/update`)
 
 	form.querySelector('#price').value = card.querySelector('.fee-price').innerText
 	form.querySelector('#payment').value = card.querySelector('.fee-payment').innerText

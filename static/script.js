@@ -15,9 +15,9 @@ call_form_button.addEventListener('click', event => {
 	input.querySelector("[name = 'name_ru']").value = ''
 	input.querySelector("[name = 'name_en']").value = ''
 
-	input.querySelector("[name = 'image']").setAttribute('required', '')
 
 	try{
+		input.querySelector("[name = 'image']").setAttribute('required', '')
 		input.querySelector("[name = 'capacity']").value = ''
 		input.querySelector("[name = 'phone']").value = ''
 		input.querySelector("[name = 'target']").value = ''
@@ -28,16 +28,20 @@ call_form_button.addEventListener('click', event => {
 	} catch(e){}
 })
 
+try{
 form_cover.addEventListener('click', event => {
 	form.style.display = 'none';
 	form.style.opacity = 0
-	input.querySelector("[name = 'image']").removeAttribute('required')
+	try{	
+		input.querySelector("[name = 'image']").removeAttribute('required')
+	} catch {}
 })
 panel_cover.addEventListener('click', event => {
 	panel = document.getElementById('subcategory-panel')
 	panel.style.display = 'none';
 	panel.style.opacity = 0
 })
+} catch {}
 
 
 function editCategory(card, link){
@@ -69,6 +73,7 @@ function editProduct(card, link, id){
 	input.querySelector("[name = 'name_uz']").value = product['name']['uz']
 	input.querySelector("[name = 'name_ru']").value = product['name']['ru']
 	input.querySelector("[name = 'name_en']").value = product['name']['en']
+	input.querySelector("[name = 'code']").value = product['code']
 
 	input.querySelector("[name = 'desc_uz']").value = product['description']['uz']
 	input.querySelector("[name = 'desc_ru']").value = product['description']['ru']
@@ -77,10 +82,12 @@ function editProduct(card, link, id){
 	input.querySelector("[name = 'discount']").value = product['discount']
 	input.querySelector("[name = 'price']").value = product['price']
 	input.querySelector("[name = 'time']").value = product['readyTime']
+	input.querySelector("[name = 'category']").value = product['categoryId']
 }
 
 function editBranch(card, link){
 	card = card.parentNode.parentNode
+	console.log(card.querySelector('#branch-address-name'))
 
 	form.style.display = 'flex';
 	form.style.opacity = 1
@@ -91,6 +98,12 @@ function editBranch(card, link){
 	input.querySelector("[name = 'name_uz']").value = card.querySelector('#branch-name-uz').innerText
 	input.querySelector("[name = 'name_ru']").value = card.querySelector('#branch-name-ru').innerText
 	input.querySelector("[name = 'name_en']").value = card.querySelector('#branch-name-en').innerText
+
+	input.querySelector("[name = 'district']").value = card.querySelector('#branch-address-district').innerText
+	input.querySelector("[name = 'address_name']").value = card.querySelector('#branch-address-name').innerText
+	input.querySelector("[name = 'street']").value = card.querySelector('#branch-address-street').innerText
+	input.querySelector("[name = 'latitude']").value = card.querySelector('#branch-address-latitude').innerText
+	input.querySelector("[name = 'longitude']").value = card.querySelector('#branch-address-longitude').innerText
 
 	input.querySelector("[name = 'phone']").value = card.querySelector('#branch-phone').innerText
 	input.querySelector("[name = 'capacity']").value = card.querySelector('#branch-capacity').innerText

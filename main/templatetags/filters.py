@@ -36,3 +36,8 @@ def safeorder(order):
 @register.filter
 def user_roles(roles):
 	return ' | '.join(roles)
+
+
+@register.filter
+def paid(p):
+	return 'Yes' if p else 'No'

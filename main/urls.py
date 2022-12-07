@@ -6,6 +6,8 @@ urlpatterns = [
 	path('', views.login, name = 'login'),
 	path('auth', views.auth, name = 'auth'),
 
+	path('charts', views.charts, name = 'charts'),
+
 	path('home', views.home, name = 'home'),
 	path('home/filter', views.filter, name = 'filter'),
 
@@ -26,8 +28,7 @@ urlpatterns = [
 	path('users/update/<int:user_id>', views.update_user, name = 'update_user'),
 
 	path('fees', views.fees, name = 'fees'),
-	path('fees/add', views.add_fee, name = 'add_fee'),
-	path('fees/update/<int:fee_id>', views.update_fee, name = 'update_fee'),
+	path('fees/update', views.update_fee, name = 'update_fee'),
 
 	path('branches', views.branches, name = 'branches'),
 	path('branch/create', views.add_branch, name = 'add_branch'),

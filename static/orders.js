@@ -37,11 +37,11 @@ function showOrder(order) {
 	document.getElementById('order-view-date').innerText = new Date(order.creationTime).toLocaleDateString('en-US', dateOptions)
 	document.getElementById('order-view-phone').innerText = order.user
 	document.getElementById('order-view-delivery').innerText = order.deliveryTime
-	document.getElementById('order-view-address').innerText = order.address
+	document.getElementById('order-view-address').innerText = order.addressRes
 	document.getElementById('order-view-comment').innerText = order.comments
 	document.getElementById('order-view-order').innerText = products.join('\n')
 	document.getElementById('order-view-type').innerText = order.orderType
-	document.getElementById('order-view-pay').innerText = order.payType
+	document.getElementById('order-view-pay').innerText = order.paymentMethod
 
 	document.getElementById('order-cancel-button').setAttribute('href', `${window.origin}/update/${order.id}/CANCELLED`)
 	document.getElementById('order-deliver-button').setAttribute('href', `${window.origin}/update/${order.id}/DELIVER`)

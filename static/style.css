@@ -306,6 +306,17 @@ body{
 	border-radius: 3vh;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+.add-branch-form{
+	width: 60%;
+	padding: 4vh 3vw;
+	background: white;
+	position: relative;
+	border-radius: 3vh;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 2vw;
+}
 .add-form-section{
 	display: flex;
 	flex-direction: column;
@@ -343,6 +354,7 @@ body{
 	border: 1px solid #eeeeee;
 	border-radius: 1.5vh;
 	cursor: pointer;
+	width: 100%;
 }
 .add-form button{
 	border: none;

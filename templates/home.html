@@ -9,10 +9,12 @@
 	{% load static %}
 	<link rel="icon" href="{% static 'moti.svg' %}">
 	<link rel="stylesheet" href="{% static 'style.css' %}">
+	<link rel="stylesheet" href="{% static 'charts.css' %}">
 
 	<link href="https://kit-pro.fontawesome.com/releases/v6.2.0/css/pro.min.css" rel="stylesheet">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body>
 	{% block content %}
@@ -87,12 +89,12 @@
 				<div class="add-form-section">
 					<label for="#address"><small>Address</small></label>
 					<select name="address" id="address">
-						<option value="1">Address</option>
+						<option value="2">Address</option>
 					</select>
 					<label for="#branch"><small>Branch</small></label>
 					<select name="branch" id="branch">
 						{% for branch in branches %}
-							<option value="{{branch.id}}">{{branch.information.eng.text}}</option>
+							<option value="{{branch.id}}">{{branch.information.en}}</option>
 						{% endfor %}
 					</select>
 					<label for="#order-type"><small>Order Type</small></label>
@@ -122,7 +124,7 @@
 					<div class="add-form-order-split">
 						<select id="product">
 							{% for product in products %}
-								<option value="{{product.productName.eng.text}}-{{product.id}}">{{product.productName.eng.text}}</option>
+								<option value="{{product.name.en}}-{{product.id}}">{{product.name.en}}</option>
 							{% endfor %}
 						</select>
 						<input type="number" id="amount" placeholder="0">
@@ -146,6 +148,7 @@
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
 						{% if 'ADMIN' in request.session.roles %}
+						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
@@ -188,8 +191,8 @@
 					</div>
 					<table class="order-table" border="0" cellspacing="0">
 						<tr class="order-table-head">
-							<td>Phone</td>
-							<td>Name</td>
+							<td>User</td>
+							<td>Paid</td>
 							<td>ID</td>
 							<td>Price</td>
 							<td>Status</td>
@@ -200,7 +203,7 @@
 							{% for order in orders %}
 								<tr onclick="showOrder({{order|safeorder}})">
 									<td><small>{{order.user}}</small></td>
-									<td><small>{{order.user}}</small></td>
+									<td><small>{{order.paid | paid}}</small></td>
 									<td><small>{{order.id}}</small></td>
 									<td><small>{{order.price}}</small></td>
 									<td><small class="order-status-color-{{order.status}}">{{order.status}}</small></td>
