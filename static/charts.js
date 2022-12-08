@@ -42,7 +42,6 @@ function paymentMethods(report){
 		series: [12000, 10000, 11200],
 		labels: ['Payme', 'Click', 'Cash']
 	}
-	console.log(paymentMethodsOptions)
 
 	let paymentMethodsChart = new ApexCharts(document.getElementById('payment-methods-chart'), paymentMethodsOptions)
 	paymentMethodsChart.render()
@@ -79,4 +78,15 @@ function last30Orders(report){
 
 	let last30OrdersChart = new ApexCharts(document.getElementById('last-30-orders-chart'), last30OrdersOptions)
 	last30OrdersChart.render()
+}
+
+function downloadReport(){
+	let form = document.querySelector('#download-report form')
+	let start = String(form.querySelector('input[name="start-date"]').value)
+	let end = String(form.querySelector('input[name="end-date"]').value)
+	start = new Date(start.split('-'))
+	end = new Date(end.split('-'))
+	form.querySelector('input[name="start"]').value = start.getTime()
+	form.querySelector('input[name="end"]').value = end.getTime()
+	form.submit()
 }

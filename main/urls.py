@@ -7,6 +7,7 @@ urlpatterns = [
 	path('auth', views.auth, name = 'auth'),
 
 	path('charts', views.charts, name = 'charts'),
+	path('charts/download-report', views.download_report, name = 'download_report'),
 
 	path('home', views.home, name = 'home'),
 	path('home/filter', views.filter, name = 'filter'),

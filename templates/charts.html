@@ -78,13 +78,16 @@
 						</div>
 					</section>
 					<section id="download-report">
-						<form action="" method="post">
+						<form action="{% url 'download_report' %}" method="post">
+							{% csrf_token %}
 							<label for="start">Start:&ensp;</label>
-							<input type="date" name="start">
+							<input required type="date" name="start-date">
 							<label for="end">End:&ensp;</label>
-							<input type="date" name="end">
+							<input required type="date" name="end-date">
+							<input type="hidden" name="start">
+							<input type="hidden" name="end">
 							<div>
-								<button>Download</button>
+								<button type="button" onclick="downloadReport()">Download</button>
 							</div>
 						</form>
 					</section>

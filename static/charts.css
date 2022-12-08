@@ -53,6 +53,7 @@
 	align-items: center;
 }
 #download-report input{
+	width: 15%;
 	padding: 1.5vh;
 	border: 1px solid #dddddd;
 	border-radius: 1vh;

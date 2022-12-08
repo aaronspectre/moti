@@ -2,7 +2,7 @@ import json
 import requests
 from django.urls import reverse
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from main.swagger import Swagger
 
 
@@ -17,7 +17,7 @@ def auth(request):
 	if 'token' in response:
 		request.session['token'] = "Bearer " + response['token']['token']
 		request.session['roles'] = response['role']
-		return HttpResponseRedirect(reverse('home'))
+		return HttpResponseRedirect(reverse('charts'))
 	else:
 		return HttpResponseRedirect(reverse('login'))
 
@@ -33,6 +33,15 @@ def charts(request):
 		'payment_methods': payment_methods,
 		'last_30_orders': last_30_orders
 	})
+
+
+def download_report(request):
+	Swagger.report_download(request.session['token'], request.POST['start'], request.POST['end'])
+	with open('report.xlsx', 'rb') as report:
+		data = report.read()
+	response = HttpResponse(data, content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+	response['Content-Disposition'] = 'attachment; filename=report.xlsx'
+	return response
 
 
 def home(request):

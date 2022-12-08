@@ -237,6 +237,15 @@ class Swagger:
 		return response
 
 
+	@staticmethod
+	def report_download(token, start, end):
+		payload = '{\n    \"from\" : '+str(start)+',\n    \"to\" : '+str(end)+'\n}'
+		headers = {'Authorization': token, 'Content-Type': 'application/json'}
+		response = requests.post(ENDPOINT+'report/download-excel', data = payload, headers = headers)
+		with open('report.xlsx', 'wb') as report:
+			report.write(response.content)
+
+
 
 if __name__ == '__main__':
 	print('Swagger')
