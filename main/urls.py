@@ -12,7 +12,6 @@ urlpatterns = [
 	path('home', views.home, name = 'home'),
 	path('home/filter', views.filter, name = 'filter'),
 
-	path('home/order', views.create_order, name = 'create_order'),
 	path('update/<int:order_id>/<str:status>', views.update_order, name = 'update_order'),
 
 	path('products', views.products, name = 'products'),
@@ -26,6 +25,7 @@ urlpatterns = [
 	path('categories/delete/<int:category_id>', views.delete_category, name = 'delete_category'),
 
 	path('users', views.users, name = 'users'),
+	path('users/change_password', views.change_password, name = 'change_password'),
 	path('users/update/<int:user_id>', views.update_user, name = 'update_user'),
 
 	path('fees', views.fees, name = 'fees'),

@@ -17,30 +17,41 @@
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body>
+	<div class="add-form" id="change-password">
+		<div class="add-form-cover"></div>
+		<form action="{% url 'change_password' %}" method="post">
+			<label for="old-password"><small>Старый пароль</small></label>
+			<input required type="password" id="old-password" name="old">
+			<label for="new-password"><small>Новый пароль</small></label>
+			<input required type="password" id="new-password" name="new">
+			{% csrf_token %}
+			<button><small>Сохранить</small></button>
+		</form>
+	</div>
 	{% block content %}
 		<div class="add-form" id="add-form">
 			<div class="add-form-cover"></div>
-			<div class="add-product-form">
+			<div class="view-order-panel">
 				<div class="add-form-section">
 					<table>
 						<tr>
-							<td><strong>Phone:</strong></td>
+							<td><strong>Телефон:</strong></td>
 							<td id="order-view-phone"></td>
 						</tr>
 						<tr>
-							<td><strong>Price:</strong></td>
+							<td><strong>Цена:</strong></td>
 							<td id="order-view-price"></td>
 						</tr>
 						<tr>
-							<td><strong>Status:</strong></td>
+							<td><strong>Статус:</strong></td>
 							<td id="order-view-status"></td>
 						</tr>
 						<tr>
-							<td><strong>Type:</strong></td>
+							<td><strong>Тип:</strong></td>
 							<td id="order-view-type"></td>
 						</tr>
 						<tr>
-							<td><strong>Order:</strong></td>
+							<td><strong>Заказ:</strong></td>
 							<td id="order-view-order"></td>
 						</tr>
 					</table>
@@ -48,55 +59,49 @@
 				<div class="add-form-section">
 					<table>
 						<tr>
-							<td><strong>Date:</strong></td>
+							<td><strong>Дата:</strong></td>
 							<td id="order-view-date"></td>
 						</tr>
 						<tr>
-							<td><strong>Delivery:</strong></td>
+							<td><strong>Доставка:</strong></td>
 							<td id="order-view-delivery"></td>
 						</tr>
 						<tr>
-							<td><strong>Address:</strong></td>
+							<td><strong>Адрес:</strong></td>
 							<td id="order-view-address"></td>
 						</tr>
 						<tr>
-							<td><strong>Pay Method:</strong></td>
+							<td><strong>Способ оплаты:</strong></td>
 							<td id="order-view-pay"></td>
 						</tr>
 						<tr>
-							<td><strong>Comment:</strong></td>
+							<td><strong>Комментарий:</strong></td>
 							<td id="order-view-comment"></td>
 						</tr>
 					</table>
 				</div>
-				<div class="add-form-section">
-					<table>
-						<tr>
-							<td><canvas id="qr"></canvas></td>
-						</tr>
-					</table>
-				</div>
 				<div class="order-manage">
-					<a class="order-manage-buttons" id="order-cancel-button"><small><i class="fal fa-trash"></i>&ensp;Cancel</small></a>
-					<a class="order-manage-buttons" id="order-deliver-button"><small><i class="fal fa-moped"></i>&ensp;Deliver</small></a>
+					<select id="status-changer" name="status" onchange="changeStatus(this)">
+						<option value="PREPARE">PREPARE</option>
+						<option value="DELIVER">DELIVER</option>
+						<option value="SUCCESS">SUCCESS</option>
+						<option value="ORDERED">ORDERED</option>
+						<option value="CANCELLED">CANCELLED</option>
+					</select>
 				</div>
 			</div>
 		</div>
 
-		<div class="add-form" id="create-form">
+		<!-- <div class="add-form" id="create-form">
 			<div class="add-form-cover"></div>
-			<form class="add-product-form" method="post" action="{% url 'create_order' %}">
+			<form class="add-product-form" method="post" action="">
 				<div class="add-form-section">
 					<label for="#address"><small>Address</small></label>
 					<select name="address" id="address">
 						<option value="2">Address</option>
 					</select>
 					<label for="#branch"><small>Branch</small></label>
-					<select name="branch" id="branch">
-						{% for branch in branches %}
-							<option value="{{branch.id}}">{{branch.information.en}}</option>
-						{% endfor %}
-					</select>
+					<select name="branch" id="branch"></select>
 					<label for="#order-type"><small>Order Type</small></label>
 					<select name="order-type" id="order-type">
 						<option value="DELIVERY">DELIVERY</option>
@@ -122,11 +127,7 @@
 				<div class="add-form-section">
 					<label for="#product"><small>Order</small></label>
 					<div class="add-form-order-split">
-						<select id="product">
-							{% for product in products %}
-								<option value="{{product.name.en}}-{{product.id}}">{{product.name.en}}</option>
-							{% endfor %}
-						</select>
+						<select id="product"></select>
 						<input type="number" id="amount" placeholder="0">
 					</div>
 					<button type="button" onclick="addProduct()"><small>Add</small></button>
@@ -137,25 +138,24 @@
 				<div class="order-manage">
 					<button onclick="submitOrder()"><small>Create</small></button>
 				</div>
-				{% csrf_token %}
 			</form>
-		</div>
-		<button id="call-form-button" onclick="callForm()"><i class="fas fa-plus"></i></button>
+		</div> -->
 		<div class="wrap">
 			<div class="sidebar">
 				<div class="sidemenu">
 					<img src="{% static 'moti.svg' %}" alt="logo">
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
-						{% if 'ADMIN' in request.session.roles %}
+						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
 						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
-						{% endif %}
-						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
+						{% endif %}
+						{% if 'OPERATOR' in request.session.roles %}
+						<li><a href="javascript:" onclick="showChangePassword()" id="initiator"><i class="fal fa-lock"></i></a></li>
 						{% endif %}
 					</ul>
 				</div>
@@ -163,10 +163,13 @@
 			<div class="content">
 				<div class="navbar">
 					<form action="">
-						<input type="text" placeholder="Search">
+						<input type="text" placeholder="Поиск">
 						<button><i class="fal fa-search"></i></button>
 					</form>
 					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+					{% if 'MANAGER' in request.session.roles %}
+					<a href="javascript:" onclick="showChangePassword()" id="initiator"><i class="fal fa-lock"></i></a>
+					{% endif %}
 				</div>
 				<div class="orders-board">
 					<form action="{% url 'filter' %}" class="filters" method="get">
@@ -184,36 +187,38 @@
 							<option value="CLICK">CLICK</option>
 							<option value="TERMINAL">TERMINAL</option>
 						</select>
-						<button type="submit">Apply</button>
+						<button type="submit">Применить</button>
 					</form>
 					<div class="loader">
 						<img src="{% static 'spinner.svg' %}">
 					</div>
 					<table class="order-table" border="0" cellspacing="0">
 						<tr class="order-table-head">
-							<td>User</td>
-							<td>Paid</td>
 							<td>ID</td>
-							<td>Price</td>
-							<td>Status</td>
-							<td>Date</td>
-							<td>Delivery</td>
+							<td>Телефон</td>
+							<td>Оплачено</td>
+							<td>Цена</td>
+							<td>Статус</td>
+							<td>Дата</td>
+							<td>Доставка</td>
+							<td>Способ оплаты</td>
 						</tr>
 						{% if orders %}
 							{% for order in orders %}
 								<tr onclick="showOrder({{order|safeorder}})">
-									<td><small>{{order.user}}</small></td>
-									<td><small>{{order.paid | paid}}</small></td>
 									<td><small>{{order.id}}</small></td>
+									<td><small>{{order.user}}</small></td>
+									<td><small class="available-{{order.paid}}">{{order.paid | paid}}</small></td>
 									<td><small>{{order.price}}</small></td>
 									<td><small class="order-status-color-{{order.status}}">{{order.status}}</small></td>
 									<td><small>{{order.creationTime | todate}}</small></td>
 									<td><small>{{order.deliveryTime}}</small></td>
+									<td><small>{{order.paymentMethod}}</small></td>
 								</tr>
 							{% endfor %}
 						{% else %}
 							<tr>
-								<p><small>No orders are available</small></p>
+								<p><small>Нет доступных заказов</small></p>
 							</tr>
 						{% endif %}
 					</table>
@@ -222,5 +227,6 @@
 		</div>
 		<script src="{% static 'orders.js' %}"></script>
 	{% endblock %}
+	<script src="{% static 'general.js' %}"></script>
 </body>
 </html>

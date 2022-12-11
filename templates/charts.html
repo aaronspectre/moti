@@ -8,14 +8,12 @@
 					<img src="{% static 'moti.svg' %}" alt="logo">
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
-						{% if 'ADMIN' in request.session.roles %}
+						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
 						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
-						{% endif %}
-						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
 						{% endif %}
 					</ul>
@@ -24,70 +22,73 @@
 			<div class="content">
 				<div class="navbar">
 					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+					{% if 'MANAGER' in request.session.roles %}
+					<a href="javascript:" onclick="showChangePassword()" id="initiator"><i class="fal fa-lock"></i></a>
+					{% endif %}
 				</div>
 				<div id="charts">
 					<section id="stat-cards">
 						<div class="stat-card">
 							<i class="fal fa-users"></i>
 							<h1>{{report.users}}</h1>
-							<small>Total users</small>
+							<small>Всего пользователей</small>
 						</div>
 						<div class="stat-card">
 							<i class="fal fa-calendar-circle-user"></i>
 							<h1>{{report.dailyUsers}}</h1>
-							<small>Daily users</small>
+							<small>Ежедневные пользователи</small>
 						</div>
 						<div class="stat-card">
 							<i class="fal fa-truck-fast"></i>
 							<h1>{{report.orders}}</h1>
-							<small>Total orders</small>
+							<small>Всего заказов</small>
 						</div>
 						<div class="stat-card">
 							<i class="fal fa-calendar-lines-pen"></i>
 							<h1>{{report.dailyOrders}}</h1>
-							<small>Daily orders</small>
+							<small>Ежедневные заказы</small>
 						</div>
 						<div class="stat-card">
 							<i class="fal fa-calendar-days"></i>
 							<h1>{{report.monthlyOrders}}</h1>
-							<small>Monthly orders</small>
+							<small>Ежемесячные заказы</small>
 						</div>
 						<div class="stat-card">
 							<i class="fal fa-money-bill-trend-up"></i>
 							<h1>{{report.dailyMoney}}</h1>
-							<small>Daily income</small>
+							<small>Ежедневный доход</small>
 						</div>
 						<div class="stat-card">
 							<i class="fal fa-sack-dollar"></i>
 							<h1>{{report.monthlyMoney}}</h1>
-							<small>Monthly income</small>
+							<small>Ежемесячный доход</small>
 						</div>
 					</section>
 					<section id="chart-section">
 						<div class="chart-container">
-							<h4>The most selling products</h4>
+							<h4>Самые продаваемые продукты</h4>
 							<div class="chart" id="most-selling-chart"></div>
 						</div>
 						<div class="chart-container">
-							<h4>Payment methods<br><small><u>Total: {{payment_methods.total}}</u></small></h4>
+							<h4>Способы оплаты<br><small><u>Общий: {{payment_methods.total}}</u></small></h4>
 							<div class="chart" id="payment-methods-chart"></div>
 						</div>
 						<div class="chart-container" style="grid-column: span 2;">
-							<h4>Last 30 daily orders</h4>
+							<h4>Последние 30 ежедневных заказов</h4>
 							<div class="chart" id="last-30-orders-chart"></div>
 						</div>
 					</section>
 					<section id="download-report">
 						<form action="{% url 'download_report' %}" method="post">
 							{% csrf_token %}
-							<label for="start">Start:&ensp;</label>
+							<label for="start">С:&ensp;</label>
 							<input required type="date" name="start-date">
-							<label for="end">End:&ensp;</label>
+							<label for="end">По:&ensp;</label>
 							<input required type="date" name="end-date">
 							<input type="hidden" name="start">
 							<input type="hidden" name="end">
 							<div>
-								<button type="button" onclick="downloadReport()">Download</button>
+								<button type="button" onclick="downloadReport()">Скачать</button>
 							</div>
 						</form>
 					</section>

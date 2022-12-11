@@ -7,38 +7,43 @@
 			<div class="add-form-cover"></div>
 			<form action="{% url 'add_product' %}" method="post" class="add-product-form" enctype="multipart/form-data">
 				<div class="add-form-section">
-					<label for="name"><small>Product Name</small></label>
+					<label for="name"><small>Имя продукта</small></label>
 					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
 					<input required type="text" name="name_ru" placeholder="Russian">
 					<input required type="text" name="name_en" placeholder="English">
-					<label for="code"><small>Code</small></label>
+					<label for="code"><small>Код</small></label>
 					<input required type="text" id="code" name="code" placeholder="0">
-					<label for="image"><small>Product Image</small></label>
+					<label for="image"><small>Избражение</small></label>
 					<input type="file" id="image" name="image" accept="image/*">
 					{% csrf_token %}
 				</div>
 				<div class="add-form-section">
-					<label for="description"><small>Description</small></label>
+					<label for="description"><small>Описание</small></label>
 					<textarea required type="text" id="description" name="desc_uz" placeholder="Uzbek"></textarea>
 					<textarea required type="text" name="desc_ru" placeholder="Russian"></textarea>
 					<textarea required type="text" name="desc_en" placeholder="English"></textarea>
 				</div>
 				<div class="add-form-section">
-					<label for="discount"><small>Discount</small></label>
+					<label for="discount"><small>Скидка</small></label>
 					<input required type="number" id="discount" name="discount" step="any" placeholder="0.0">
-					<label for="price"><small>Price</small></label>
+					<label for="price"><small>Цена</small></label>
 					<input required type="number" id="price" name="price" placeholder="0.0">
-					<label for="time"><small>Preparing Time (in minutes)</small></label>
+					<label for="time"><small>Время приготовления (в минутах)</small></label>
 					<input required type="number" id="time" name="time" placeholder="0">
-					<label for="category"><small>Category</small></label>
+					<label for="category"><small>Категория</small></label>
 					<select name="category" id="category">
 						{% for category in categories %}
 							<option value="{{category.id}}">{{category.name.ru}}</option>
 						{% endfor %}
 					</select>
+					<label for="available"><small>Доступность</small></label>
+					<select name="available" id="available">
+						<option value="true">Доступно</option>
+						<option value="false">Не доступно</option>
+					</select>
 				</div>
 				<div class="add-form-section">
-					<button type="submit">Save</button>
+					<button type="submit">Сохранить</button>
 				</div>
 			</form>
 		</div>
@@ -49,22 +54,22 @@
 			<img src="{% static 'spinner.svg' %}" id="loading">
 			<form action="{% url 'add_category' %}" method="post" class="add-category-form">
 				<div class="add-form-section">
-					<label for="#name"><small>Category Name</small></label>
+					<label for="#name"><small>Название</small></label>
 					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
 					<input required type="text" name="name_ru" placeholder="Russian">
 					<input required type="text" name="name_en" placeholder="English">
 					<div id="subcat">
 						<input type="checkbox" id="subcategory" name="subcategory" onchange="showParentSelector(this)">
-						<label for="subcategory"><small>Subcategory</small></label>
+						<label for="subcategory"><small>Подкатегория</small></label>
 					</div>
 					<select name="parent" id="parent" name="parent">
 						{% for category in categories %}
 							{% if 'parentCategoryId' not in category %}
-								<option value="{{category.id}}">{{category.name.en}}</option>
+								<option value="{{category.id}}">{{category.name.ru}}</option>
 							{% endif %}
 						{% endfor %}
 					</select>
-					<button type="submit">Save</button>
+					<button type="submit">Сохранить</button>
 					{% csrf_token %}
 				</div>
 			</form>
@@ -84,29 +89,29 @@
 			<div class="add-form-cover"></div>
 			<form action="{% url 'add_branch' %}" method="post" class="add-branch-form" enctype="multipart/form-data">
 				<div class="add-form-section">
-					<label for="address">Branch Address</label>
-					<input type="text" id="address" name="address_name" placeholder="Name">
-					<input type="text" name="district" placeholder="District">
-					<input type="text" name="street" placeholder="Street">
-					<input type="number" step="any" name="latitude" placeholder="(0.0) Latitude">
-					<input type="number" step="any" name="longitude" placeholder="(0.0) Longitude">
+					<label for="address">Адрес</label>
+					<input type="text" id="address" name="address_name" placeholder="Название">
+					<input type="text" name="district" placeholder="Район">
+					<input type="text" name="street" placeholder="Улица">
+					<input type="number" step="any" name="latitude" placeholder="(0.0) Широта">
+					<input type="number" step="any" name="longitude" placeholder="(0.0) Долгота">
 				</div>
 				<div class="add-form-section">
-					<label for="name"><small>Branch Information</small></label>
+					<label for="name"><small>Информация</small></label>
 					<input required type="text" id="name" name="name_uz" placeholder="Uzbek">
-					<input required type="text" name="name_ru" placeholder="Russian">
+					<input required type="text" name="name_ru" placeholder="Русский">
 					<input required type="text" name="name_en" placeholder="English">
 				</div>
 				<div class="add-form-section">
-					<label for="phone"><small>Contacts</small></label>
+					<label for="phone"><small>Контакты</small></label>
 					<input required type="text" id="phone" name="phone" placeholder="998xxxxxxxxx">
-					<label for="capacity"><small>Capacity</small></label>
+					<label for="capacity"><small>Вместимость</small></label>
 					<input required type="text" id="capacity" name="capacity" placeholder="0">
-					<label for="target"><small>Target</small></label>
-					<input required type="text" id="target" name="target" placeholder="Target">
-					<label for="image"><small>Image</small></label>
+					<label for="target"><small>Ориентир</small></label>
+					<input required type="text" id="target" name="target" placeholder="Ориентир">
+					<label for="image"><small>Изображение</small></label>
 					<input type="file" id="image" name="image" accept="image/*">
-					<button type="submit">Save</button>
+					<button type="submit">Сохранить</button>
 					{% csrf_token %}
 				</div>
 			</form>
@@ -119,12 +124,12 @@
 					<img src="{% static 'moti.svg' %}" alt="logo">
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
+						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
 						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
-						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
 						{% endif %}
 					</ul>
@@ -133,10 +138,13 @@
 			<div class="content">
 				<div class="navbar">
 					<form action="">
-						<input type="text" placeholder="Search">
+						<input type="text" placeholder="Поиск">
 						<button><i class="fal fa-search"></i></button>
 					</form>
 					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+					{% if 'MANAGER' in request.session.roles %}
+					<a href="javascript:" onclick="showChangePassword()" id="initiator"><i class="fal fa-lock"></i></a>
+					{% endif %}
 				</div>
 				<div class="board">
 					{% if show_add_product %}
@@ -146,15 +154,15 @@
 									<img src="{{product.imageUrl}}" alt="{{product.productName.ru.text}}">
 									<strong>{{product.name.ru}}</strong>
 									<p><i class="fal fa-list-timeline"></i>&ensp;{{product.categoryId}}</p>
-									<p><i class="fal fa-circle-dollar"></i>&ensp;{{product.price}} sum</p>
+									<p><i class="fal fa-circle-dollar"></i>&ensp;{{product.price}} сум</p>
 									<p><i class="fal fa-receipt"></i>&ensp;{{product.discount}}</p>
 									<p><i class="fal fa-clock"></i>&ensp;{{product.readyTime}}</p>
 									<p><i class="fal fa-hashtag"></i>&ensp;{{product.id}}</p>
-									<p><small>{{product.description.ru}} </small></p>
+									<p class="available-{{product.available}}"><i class="fal fa-pot-food"></i>&ensp;{{product.available | available}}</p>
 								</div>
 								<div class="order-actions">
-									<a href="{% url 'delete_product' product.id %}"><small><i class="fal fa-trash"></i>&ensp;Remove</small></a>
-									<a onclick="editProduct(this, `{% url 'update_product' product.id %}`, {{forloop.counter}})" href="javascript:void(0);"><small><i class="fal fa-pen-to-square"></i>&ensp;Edit</small></a>
+									<a href="{% url 'delete_product' product.id %}"><small><i class="fal fa-trash"></i>&ensp;Удалить</small></a>
+									<a onclick="editProduct(this, `{% url 'update_product' product.id %}`, {{forloop.counter}})" href="javascript:void(0);"><small><i class="fal fa-pen-to-square"></i>&ensp;Изменить</small></a>
 								</div>
 							</div>
 						{% endfor %}
@@ -169,8 +177,8 @@
 									<p><b>En:</b>&ensp;<span class="card-name-en">{{category.name.en}}</span></p>
 								</div>
 								<div class="order-actions">
-									<a href="{% url 'delete_category' category.id %}"><small><i class="fal fa-trash"></i>&ensp;Remove</small></a>
-									<a href="javascript:void(0);" onclick="editCategory(this, `{% url 'update_category' category.id %}`)"><small><i class="fal fa-pen-to-square"></i>&ensp;Edit</small></a>
+									<a href="{% url 'delete_category' category.id %}"><small><i class="fal fa-trash"></i>&ensp;Удалить</small></a>
+									<a href="javascript:void(0);" onclick="editCategory(this, `{% url 'update_category' category.id %}`)"><small><i class="fal fa-pen-to-square"></i>&ensp;Изменить</small></a>
 								</div>
 							</div>
 							{% endif %}
@@ -195,13 +203,13 @@
 									<i id="branch-address-longitude" style="display: none;">{{branch.address.longitude}}</i>
 								</div>
 								<div class="order-actions">
-									<a href="{% url 'delete_branch' branch.id %}"><small><i class="fal fa-trash"></i>&ensp;Remove</small></a>
-									<a href="javascript:void(0);" onclick="editBranch(this, `{% url 'update_branch' branch.id %}`)"><small><i class="fal fa-pen-to-square"></i>&ensp;Edit</small></a>
+									<a href="{% url 'delete_branch' branch.id %}"><small><i class="fal fa-trash"></i>&ensp;Удалить</small></a>
+									<a href="javascript:void(0);" onclick="editBranch(this, `{% url 'update_branch' branch.id %}`)"><small><i class="fal fa-pen-to-square"></i>&ensp;Изменить</small></a>
 								</div>
 							</div>
 						{% endfor %}
 					{% else %}
-						<p><small>0 items are available</small></p>
+						<p><small>Товаров доступно: 0</small></p>
 					{% endif %}
 				</div>
 			</div>

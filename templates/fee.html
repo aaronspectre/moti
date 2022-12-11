@@ -22,14 +22,12 @@
 					<img src="{% static 'moti.svg' %}" alt="logo">
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
-						{% if 'ADMIN' in request.session.roles %}
+						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
 						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
-						{% endif %}
-						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
 						{% endif %}
 					</ul>
@@ -42,13 +40,16 @@
 						<button><i class="fal fa-search"></i></button>
 					</form>
 					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+					{% if 'MANAGER' in request.session.roles %}
+					<a href="javascript:" onclick="showChangePassword()" id="initiator"><i class="fal fa-lock"></i></a>
+					{% endif %}
 				</div>
 				<div class="board">
 					<div class="users-board">
 						<table class="order-table" border="0" cellspacing="0">
 							<tr class="order-table-head">
-								<td>Price</td>
-								<td>Payment</td>
+								<td>Цена</td>
+								<td>Оплата</td>
 							</tr>
 							{% if fee %}
 								<tr onclick="feeCard(this)">
@@ -57,7 +58,7 @@
 								</tr>
 							{% else %}
 								<tr>
-									<p><small>No fees are available</small></p>
+									<p><small>0 элементов найдено</small></p>
 								</tr>
 							{% endif %}
 						</table>

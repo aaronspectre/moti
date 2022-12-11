@@ -16,7 +16,7 @@ function mostSelling(report){
 			}
 		},
 		series: [{
-			name: 'Products',
+			name: 'Товары',
 			data: series
 		}],
 		xaxis: {
@@ -33,13 +33,13 @@ function mostSelling(report){
 }
 
 function paymentMethods(report){
-	let series = [report.paymeAmount, report.clickAmount, report.cashAmount]
+	let series = [report.clickAmount, report.paymeAmount, report.cashAmount]
 	let paymentMethodsOptions = {
 		chart: {
 			width: 480,
 			type: 'pie'
 		},
-		series: [12000, 10000, 11200],
+		series: series,
 		labels: ['Payme', 'Click', 'Cash']
 	}
 
@@ -62,7 +62,7 @@ function last30Orders(report){
 			height: 500
 		},
 		series: [{
-			name: 'Orders',
+			name: 'Заказы',
 			data: series
 		}],
 		dataLabels: {
@@ -84,6 +84,10 @@ function downloadReport(){
 	let form = document.querySelector('#download-report form')
 	let start = String(form.querySelector('input[name="start-date"]').value)
 	let end = String(form.querySelector('input[name="end-date"]').value)
+	if (typeof start === 'string' && start.length === 0 || typeof end === 'string' && end.length === 0){
+		alert("Choose start and end dates")
+		return
+	}
 	start = new Date(start.split('-'))
 	end = new Date(end.split('-'))
 	form.querySelector('input[name="start"]').value = start.getTime()

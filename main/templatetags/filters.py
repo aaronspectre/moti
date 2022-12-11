@@ -34,10 +34,10 @@ def safeorder(order):
 
 
 @register.filter
-def user_roles(roles):
-	return ' | '.join(roles)
+def paid(p):
+	return 'Да' if p else 'Нет'
 
 
 @register.filter
-def paid(p):
-	return 'Yes' if p else 'No'
+def available(p):
+	return 'Доступно' if p else 'Не доступно'

@@ -8,6 +8,8 @@ from main.swagger import Swagger
 
 def login(request):
 	if 'token' in request.session:
+		if 'MANAGER' in response['role']:
+			return HttpResponseRedirect(reverse('charts'))
 		return HttpResponseRedirect(reverse('home'))
 	return render(request, 'login.html')
 
@@ -17,7 +19,9 @@ def auth(request):
 	if 'token' in response:
 		request.session['token'] = "Bearer " + response['token']['token']
 		request.session['roles'] = response['role']
-		return HttpResponseRedirect(reverse('charts'))
+		if 'MANAGER' in response['role']:
+			return HttpResponseRedirect(reverse('charts'))
+		return HttpResponseRedirect(reverse('home'))
 	else:
 		return HttpResponseRedirect(reverse('login'))
 
@@ -45,16 +49,14 @@ def download_report(request):
 
 
 def home(request):
-	try:
-		if 'token' not in request.session:
-			return HttpResponseRedirect(reverse('login'))
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
 
-		orders = Swagger.filter(request.session['token'], 'DELIVERY', 'PAYME')
-		products = Swagger.products(request.session['token'])
-		branches  = Swagger.branches(request.session['token'])
-		return render(request, 'home.html', {'orders': orders, 'products': products, 'branches': branches})
+	orders = Swagger.filter(request.session['token'], 'DELIVERY', 'PAYME')
+	return render(request, 'home.html', {'orders': orders})
+	try:
+		pass
 	except Exception as e:
-		print(e)
 		del request.session['token']
 		return HttpResponseRedirect(reverse('login'))
 
@@ -64,19 +66,23 @@ def filter(request):
 		return HttpResponseRedirect(reverse('login'))
 
 	orders = Swagger.filter(request.session['token'], request.GET['order-type'], request.GET['payment'])
-	products = Swagger.products(request.session['token'])
-	branches  = Swagger.branches(request.session['token'])
 	return render(
 		request,
 		'home.html',
 		{
 			'orders': orders,
-			'products': products,
-			'branches': branches,
 			'type': request.GET['order-type'],
 			'payment': request.GET['payment']
 		}
 	)
+
+
+def update_order(request, order_id, status):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.updateOrder(request.session['token'], status, order_id)
+	return HttpResponse('done')
 
 
 def branches(request):
@@ -109,22 +115,6 @@ def delete_branch(request, branch_id):
 
 	Swagger.deleteBranch(request.session['token'], branch_id)
 	return HttpResponseRedirect(reverse('branches'))
-
-
-def create_order(request):
-	if 'token' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
-
-	Swagger.create_order(request.session['token'], request.POST)
-	return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-
-def update_order(request, order_id, status):
-	if 'token' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
-
-	Swagger.updateOrder(request.session['token'], status, order_id)
-	return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 def categories(request):
@@ -221,6 +211,14 @@ def update_user(request, user_id):
 
 	Swagger.update_user(request.session['token'], request.POST, user_id)
 	return HttpResponseRedirect(reverse('users'))
+
+
+def change_password(request):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.change_password(request.session['token'], request.POST)
+	return HttpResponseRedirect(reverse('logout'))
 
 
 def fees(request):

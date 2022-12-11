@@ -160,8 +160,8 @@ function showChildren(token, button){
 	child = `
 		<tr>
 			<td><b>ID</b></td>
-			<td><b>Parent</b></td>
-			<td><b>UZ</b></td>
+			<td><b>Исходная категория</b></td>
+			<td><b>Название</b></td>
 			<td></td>
 		</tr>
 	`
@@ -182,8 +182,8 @@ function showChildren(token, button){
 					<td>${category.parentCategoryId}</td>
 					<td>${category.name}</td>
 					<td>
-						<a href="javascript:void(0);" onclick="editSubCategory(${category.id}, '${window.location.origin}/categories/update/${category.id}', '${token}')"><i class="fal fa-pen-to-square"></i>&ensp;<small>Edit</small></a>
-						<a href="${window.location.origin}/categories/delete/${category.id}"><i class="fal fa-trash"></i>&ensp;<small>Delete</small></a>
+						<a href="javascript:void(0);" onclick="editSubCategory(${category.id}, '${window.location.origin}/categories/update/${category.id}', '${token}')"><i class="fal fa-pen-to-square"></i>&ensp;<small>Изменить</small></a>
+						<a href="${window.location.origin}/categories/delete/${category.id}"><i class="fal fa-trash"></i>&ensp;<small>Удалить</small></a>
 					</td>
 				</tr>
 			`

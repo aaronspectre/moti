@@ -6,36 +6,31 @@
 			<div class="add-form-cover"></div>
 			<form action="" method="post" class="add-category-form">
 				<div class="add-form-section">
-					<label for="#name"><small>First Name</small></label>
-					<input required type="text" id="name" name="first_name" placeholder="First Name">
-					<label for="#role"><small>Role</small></label>
-					<div class="add-form-user-roles"></div>
-					<select name="role" id="role" id="role" onchange="addRole(this)">
-						<option value="ADMIN">Administrator</option>
+					<label for="#name"><small>Имя</small></label>
+					<input required type="text" id="name" name="name" placeholder="Имя">
+					<label for="#role"><small>Роль</small></label>
+					<select name="role" id="role" id="role">
 						<option value="MANAGER">Manager</option>
 						<option value="OPERATOR">Operator</option>
 						<option value="USER">User</option>
 					</select>
-					<input type="hidden" id="user-roles" name="user-roles">
-					<button type="submit">Save</button>
+					<button type="submit">Сохранить</button>
 					{% csrf_token %}
 				</div>
 			</form>
 		</div>
-		<button id="call-form-button" style="display: none;"></button>
 		<div class="wrap">
 			<div class="sidebar">
 				<div class="sidemenu">
 					<img src="{% static 'moti.svg' %}" alt="logo">
 					<ul>
 						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
-						{% if 'ADMIN' in request.session.roles %}
+						{% if 'MANAGER' in request.session.roles %}
+						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
 						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
 						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
-						{% endif %}
-						{% if 'MANAGER' in request.session.roles %}
 						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
 						{% endif %}
 					</ul>
@@ -44,27 +39,30 @@
 			<div class="content">
 				<div class="navbar">
 					<form action="">
-						<input type="text" placeholder="Search">
+						<input type="text" placeholder="Поиск">
 						<button><i class="fal fa-search"></i></button>
 					</form>
 					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+					{% if 'MANAGER' in request.session.roles %}
+					<a href="javascript:" onclick="showChangePassword()" id="initiator"><i class="fal fa-lock"></i></a>
+					{% endif %}
 				</div>
 				<div class="board">
 					<div class="users-board">
 						<table class="order-table" border="0" cellspacing="0">
 							<tr class="order-table-head">
 								<td>ID</td>
-								<td>Phone</td>
-								<td>First Name</td>
-								<td>Roles</td>
+								<td>Телефон</td>
+								<td>Имя</td>
+								<td>Роль</td>
 							</tr>
 							{% if users %}
 								{% for user in users %}
 									<tr onclick="userCard(this)">
 										<td><small class="user-id">{{user.id}}</small></td>
-										<td><small class="user-phone-number">{{user.phoneNumber}}</small></td>
-										<td><small class="user-first-name">{{user.firstName}}</small></td>
-										<td><small class="user-role">{{user.roles | user_roles}}</small></td>
+										<td><small class="user-phone-number">{{user.phone}}</small></td>
+										<td><small class="user-first-name">{{user.name}}</small></td>
+										<td><small class="user-role">{{user.role}}</small></td>
 									</tr>
 								{% endfor %}
 							{% else %}

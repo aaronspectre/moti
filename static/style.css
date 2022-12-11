@@ -93,6 +93,7 @@ body{
 	display: block;
 	width: 1%;
 	float: right;
+	margin-left: 1vw;
 }
 .navbar a:hover{
 	background: whitesmoke;
@@ -206,6 +207,12 @@ body{
 .order-actions a:hover{
 	background: lightgrey;
 }
+.available-True{
+	color: darkgreen !important;
+}
+.available-False{
+	color: darkred !important;
+}
 
 
 .panel-item-action{
@@ -298,6 +305,17 @@ body{
 	border-radius: 3vh;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+.view-order-panel{
+	width: 50%;
+	padding: 4vh 3vw;
+	background: white;
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 2vw;
+	border-radius: 3vh;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
 .add-category-form{
 	width: 20%;
 	padding: 4vh 3vw;
@@ -378,21 +396,13 @@ body{
 	text-align: center;
 }
 .order-manage{
+	grid-column: span 2;
 	display: flex;
-	grid-column: span 3;
-	text-align: right;
-	flex-direction: row-reverse;
+	justify-content: center;
+	align-items: center;
 }
-.order-manage-buttons{
-	text-decoration: none;
-	color: black;
-	margin-right: 4vh;
-	background: whitesmoke;
-	padding: 1.5vh 2vw;
-	border-radius: 2vh;
-}
-.order-manage-buttons:hover{
-	background: lightgrey;
+.order-manage select{
+	width: 50%;
 }
 
 .order-status-color-ORDERED{
@@ -403,10 +413,6 @@ body{
 }
 .order-status-color-CANCELLED{
 	color: red;
-}
-
-.order-manage button{
-	padding: 2vh 3vw;
 }
 
 .add-form-order-split{
@@ -441,10 +447,22 @@ body{
 	padding: 1vh 2vw;
 	border-radius: 1vh;
 	border: 1px solid #eeeeee;
+	margin-left: 2vw;
 }
 #parent{
 	display: none;
 }
 #loading{
 	display: none;
+}
+
+#change-password form{
+	position: relative;
+	background: white;
+	width: 20%;
+	display: flex;
+	flex-direction: column;
+	border-radius: 2vh;
+	padding: 4vh 3vw;
+	font-size: 2vh;
 }

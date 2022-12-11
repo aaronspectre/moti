@@ -24,39 +24,27 @@ class Swagger:
 			'sort.unsorted': 'false',
 			'unpaged': 'false'
 		}
-		response = json.loads(requests.get(ENDPOINT+'user', params = params, headers = {'Authorization': token}).text)
-		return response['body']['content']
+		response = json.loads(requests.get(ENDPOINT+'user/all', params = params, headers = {'Authorization': token}).text)
+		return response['content']
 
 
 	@staticmethod
 	def update_user(token, data, user_id):
-		data = {
-			'name': data['first_name'],
-			'roles': data['user-roles'].split(' | ')
-		}
-		response = requests.put(f'{ENDPOINT}user/admin/{user_id}', json = data, headers = {'Authorization': token})
+		data = '{\n  "name": "'+data['name']+'",\n  "role": "'+data['role']+'"\n}'
+		response = requests.put(f'{ENDPOINT}user/{user_id}', data = data.encode(), headers = {'Authorization': token, 'Content-Type': 'application/json'})
 
 
 	@staticmethod
-	def create_order(token, data):
-		data = {
-			"addressId": int(data['address']),
-			"branchId": int(data['branch']),
-			"comment": data['comment'],
-			"deliveryTime": data['delivery'],
-			"distance": int(data['distance']),
-			"orderType": data['order-type'],
-			"paymentMethod": data['payment'],
-			"products": json.loads(data['orders'])
-		}
-		response = requests.post(f'{ENDPOINT}order', json = data, headers = {'Authorization': token})
-		print(response)
-		print(response.text)
+	def change_password(token, data):
+		data = '{\n  "oldPassword": "'+data['old']+'",\n  "newPassword": "'+data['new']+'"\n}'
+		user = json.loads(requests.get(ENDPOINT+'user/me', headers = {'Authorization': token}).content)
+		response = requests.put(f'{ENDPOINT}user/change-password/{user["id"]}', data = data.encode(), headers = {'Authorization': token, 'Content-Type': 'application/json'})
 
 
 	@staticmethod
 	def updateOrder(token, status, order_id):
-		response = requests.put(f'{ENDPOINT}order/{order_id}', json = {'status': status}, headers = {'Authorization': token})
+		data = '{\n    \"status\":\"'+status+'\"\n}'
+		response = requests.put(f'{ENDPOINT}order/admin/{order_id}', data = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
 
 
 	@staticmethod
@@ -70,7 +58,7 @@ class Swagger:
 			"sortBy": ["createdAt"]
 		}
 		response = json.loads(requests.get(ENDPOINT+'order', params = params, headers = {'Authorization': token}).text)
-		return response
+		return response['content']
 
 
 	@staticmethod
@@ -121,7 +109,7 @@ class Swagger:
 	def createProduct(token, request, product_id = None, update = False):
 		boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
 		if update:
-			data = '{\n  "available": true,\n  "categoryId": '+request.POST['category']+',\n  "code": "'+request.POST['code']+'",\n  "description": {\n    "en": "'+request.POST['desc_en']+'",\n    "ru": "'+request.POST['desc_ru']+'",\n    "uz": "'+request.POST['desc_uz']+'"\n  },\n  "discount": '+str(request.POST['discount'])+',\n  "name": {\n    "en": "'+request.POST['name_en']+'",\n    "ru": "'+request.POST['name_ru']+'",\n    "uz": "'+request.POST['name_uz']+'"\n  },\n  "price": '+str(request.POST['price'])+',\n  "readyTime": '+request.POST['time']+'\n}'
+			data = '{\n  "available": '+request.POST['available']+',\n  "categoryId": '+request.POST['category']+',\n  "code": "'+request.POST['code']+'",\n  "description": {\n    "en": "'+request.POST['desc_en']+'",\n    "ru": "'+request.POST['desc_ru']+'",\n    "uz": "'+request.POST['desc_uz']+'"\n  },\n  "discount": '+str(request.POST['discount'])+',\n  "name": {\n    "en": "'+request.POST['name_en']+'",\n    "ru": "'+request.POST['name_ru']+'",\n    "uz": "'+request.POST['name_uz']+'"\n  },\n  "price": '+str(request.POST['price'])+',\n  "readyTime": '+request.POST['time']+'\n}'
 			if 'image' in request.FILES:
 				image = request.FILES['image']
 				image.open(mode = 'rb')
@@ -134,7 +122,7 @@ class Swagger:
 		else:
 			image = request.FILES['image']
 			image.open(mode = 'rb')
-			data = '{\n  "available": true,\n  "categoryId": '+request.POST['category']+',\n  "code": "'+request.POST['code']+'",\n  "description": {\n    "en": "'+request.POST['desc_en']+'",\n    "ru": "'+request.POST['desc_ru']+'",\n    "uz": "'+request.POST['desc_uz']+'"\n  },\n  "discount": '+str(request.POST['discount'])+',\n  "name": {\n    "en": "'+request.POST['name_en']+'",\n    "ru": "'+request.POST['name_ru']+'",\n    "uz": "'+request.POST['name_uz']+'"\n  },\n  "price": '+str(request.POST['price'])+',\n  "readyTime": '+request.POST['time']+'\n}'
+			data = '{\n  "available": '+request.POST['available']+',\n  "categoryId": '+request.POST['category']+',\n  "code": "'+request.POST['code']+'",\n  "description": {\n    "en": "'+request.POST['desc_en']+'",\n    "ru": "'+request.POST['desc_ru']+'",\n    "uz": "'+request.POST['desc_uz']+'"\n  },\n  "discount": '+str(request.POST['discount'])+',\n  "name": {\n    "en": "'+request.POST['name_en']+'",\n    "ru": "'+request.POST['name_ru']+'",\n    "uz": "'+request.POST['name_uz']+'"\n  },\n  "price": '+str(request.POST['price'])+',\n  "readyTime": '+request.POST['time']+'\n}'
 			data = b''.join((f'--{boundary}\r\nContent-Disposition: form-data; name=product;\r\nContent-Type: application/json\r\n\r\n{data}\r\n--{boundary}\r\nContent-Disposition: form-data; name=image; filename={image.name}\r\nContent-Type: {image.content_type}\r\n\r\n'.encode(), image.read(), b'\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T--\r\n'))
 			response = requests.post(ENDPOINT+'product/admin', data = data, headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
 			image.close()
@@ -144,9 +132,9 @@ class Swagger:
 	def createCategory(token, raw, category_id = None, update = False):
 		data = '{\n  \"name\": {\n    \"en\": \"'+raw[2]+'\",\n    \"ru\": \"'+raw[1]+'\",\n    \"uz\": \"'+raw[0]+'\"\n  }\n}'
 		if update:
-			response = requests.put(f'{ENDPOINT}category/admin/{category_id}', data = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
+			response = requests.put(f'{ENDPOINT}category/admin/{category_id}', data = data.encode(), headers = {'Authorization': token, 'Content-Type': 'application/json'})
 		else:
-			response = requests.post(ENDPOINT+'category/admin', data = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
+			response = requests.post(ENDPOINT+'category/admin', data = data.encode(), headers = {'Authorization': token, 'Content-Type': 'application/json'})
 
 
 	@staticmethod
@@ -178,7 +166,7 @@ class Swagger:
 	def createSubCategory(token, raw, category_id = None, update = False):
 		data = '{\n  \"name\": {\n    \"en\": \"'+raw['name_en']+'\",\n    \"ru\": \"'+raw['name_ru']+'\",\n    \"uz\": \"'+raw['name_uz']+'\"\n  },\n  \"parentCategoryId\": '+raw['parent']+'\n}'
 		if update:
-			response = requests.put(f'{ENDPOINT}category/admin/{category_id}', data = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
+			response = requests.put(f'{ENDPOINT}category/admin/{category_id}', data = data.encode(), headers = {'Authorization': token, 'Content-Type': 'application/json'})
 		else:
 			response = requests.post(ENDPOINT+'category/admin', data = data.encode(), headers = {'Authorization': token, 'Content-Type': 'application/json'})
 
