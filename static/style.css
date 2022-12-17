@@ -139,6 +139,26 @@ body{
 }
 
 
+.pagination{
+	margin-top: 3vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 2vh;
+}
+.pagination label{
+	font-size: 2vh;
+	margin: 0 2vw;
+}
+.pagination button{
+	border: none;
+	border-radius: 1vh;
+	padding: 1vh 1vw;
+	cursor: pointer;
+}
+
+
 .board{
 	margin-top: 8vh;
 	display: grid;
@@ -148,8 +168,8 @@ body{
 	padding-bottom: 4vh;
 }
 .loader{
-	display: flex;
 	position: absolute;
+	z-index: 99999;
 	width: 84vw;
 	height: 86vh;
 	align-items: center;

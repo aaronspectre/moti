@@ -25,6 +25,7 @@ def format_data(data):
 
 @register.filter
 def todate(timestamp):
+	print('Timestamp:', timestamp)
 	return datetime.fromtimestamp(timestamp / 1000).strftime('%d %b, %H:%M')
 
 

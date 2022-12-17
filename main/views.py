@@ -8,7 +8,7 @@ from main.swagger import Swagger
 
 def login(request):
 	if 'token' in request.session:
-		if 'MANAGER' in response['role']:
+		if 'MANAGER' in request.session['roles']:
 			return HttpResponseRedirect(reverse('charts'))
 		return HttpResponseRedirect(reverse('home'))
 	return render(request, 'login.html')
@@ -27,16 +27,20 @@ def auth(request):
 
 
 def charts(request):
-	report = Swagger.report(request.session['token'])
-	most_selling = Swagger.report_most_selling(request.session['token'])
-	payment_methods = Swagger.report_payment_methods(request.session['token'])
-	last_30_orders = Swagger.report_last_30_orders(request.session['token'])
-	return render(request, 'charts.html', {
-		'report': report,
-		'most_selling': most_selling,
-		'payment_methods': payment_methods,
-		'last_30_orders': last_30_orders
-	})
+	try:
+		report = Swagger.report(request.session['token'])
+		most_selling = Swagger.report_most_selling(request.session['token'])
+		payment_methods = Swagger.report_payment_methods(request.session['token'])
+		last_30_orders = Swagger.report_last_30_orders(request.session['token'])
+		return render(request, 'charts.html', {
+			'report': report,
+			'most_selling': most_selling,
+			'payment_methods': payment_methods,
+			'last_30_orders': last_30_orders
+		})
+	except Exception as error:
+		print(error)
+		return HttpResponseRedirect(reverse('logout'))
 
 
 def download_report(request):
@@ -49,32 +53,15 @@ def download_report(request):
 
 
 def home(request):
-	if 'token' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
-
-	orders = Swagger.filter(request.session['token'], 'DELIVERY', 'PAYME')
-	return render(request, 'home.html', {'orders': orders})
 	try:
-		pass
-	except Exception as e:
+		if 'token' not in request.session:
+			return HttpResponseRedirect(reverse('login'))
+
+		orders = Swagger.page(request.session['token'], 0)
+		return render(request, 'home.html', {'orders': orders})
+	except Exception as error:
 		del request.session['token']
 		return HttpResponseRedirect(reverse('login'))
-
-
-def filter(request):
-	if 'token' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
-
-	orders = Swagger.filter(request.session['token'], request.GET['order-type'], request.GET['payment'])
-	return render(
-		request,
-		'home.html',
-		{
-			'orders': orders,
-			'type': request.GET['order-type'],
-			'payment': request.GET['payment']
-		}
-	)
 
 
 def update_order(request, order_id, status):

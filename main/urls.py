@@ -10,7 +10,6 @@ urlpatterns = [
 	path('charts/download-report', views.download_report, name = 'download_report'),
 
 	path('home', views.home, name = 'home'),
-	path('home/filter', views.filter, name = 'filter'),
 
 	path('update/<int:order_id>/<str:status>', views.update_order, name = 'update_order'),
 

@@ -6,10 +6,14 @@
 			<div class="add-form-cover"></div>
 			<form action="" method="post" class="add-category-form">
 				<div class="add-form-section">
-					<label for="#price"><small>Price</small></label>
+					<label for="#price"><small>Цена</small></label>
 					<input required type="text" id="price" name="price" placeholder="0">
-					<label for="#payment"><small>Payment</small></label>
+					<label for="#payment"><small>Оплата</small></label>
 					<input required type="text" name="payment" id="payment" placeholder="0">
+					<label for="#distance"><small>Дистанция</small></label>
+					<input required type="text" name="distance" id="distance" placeholder="0">
+					<label for="#nonpaid"><small>Не оплачиваемая дистанция</small></label>
+					<input required type="text" name="nonpaid" id="nonpaid" placeholder="0">
 					<button type="submit">Save</button>
 					{% csrf_token %}
 				</div>
@@ -50,11 +54,15 @@
 							<tr class="order-table-head">
 								<td>Цена</td>
 								<td>Оплата</td>
+								<td>Дистанция</td>
+								<td>Не оплачиваемая дистанция</td>
 							</tr>
 							{% if fee %}
 								<tr onclick="feeCard(this)">
 									<td><small class="fee-price">{{fee.price}}</small></td>
 									<td><small class="fee-payment">{{fee.deliveryPayment}}</small></td>
+									<td><small class="fee-distance">{{fee.distance}}</small></td>
+									<td><small class="fee-nonpaid">{{fee.nonPaidDistance}}</small></td>
 								</tr>
 							{% else %}
 								<tr>

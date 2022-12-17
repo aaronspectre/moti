@@ -48,17 +48,10 @@ class Swagger:
 
 
 	@staticmethod
-	def filter(token, order_type, payment):
-		params = {
-			"direction": "ASC",
-			"method": payment,
-			"orderType": order_type,
-			"page": 0,
-			"size": 100,
-			"sortBy": ["createdAt"]
-		}
-		response = json.loads(requests.get(ENDPOINT+'order', params = params, headers = {'Authorization': token}).text)
-		return response['content']
+	def page(token, page):
+		data = '{\n  "pageable": {\n    "pageNumber": '+ str(page) +',\n    "pageSize": 8\n  }\n}'
+		response = json.loads(requests.post(ENDPOINT+'order/filter', data = data, headers = {'Authorization': token, 'Content-Type': 'application/json'}).content)
+		return response
 
 
 	@staticmethod
@@ -196,7 +189,9 @@ class Swagger:
 	def update_fee(token, data):
 		data = {
 			'deliveryPayment': float(data['payment']),
-			'price': float(data['price'])
+			'price': float(data['price']),
+			'distance': float(data['distance']),
+			'nonPaidDistance': float(data['nonpaid']),
 		}
 		response = requests.put(f'{ENDPOINT}fee', json = data, headers = {'Authorization': token, 'Content-Type': 'application/json'})
 

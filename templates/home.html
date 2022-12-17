@@ -172,60 +172,78 @@
 					{% endif %}
 				</div>
 				<div class="orders-board">
-					<form action="{% url 'filter' %}" class="filters" method="get">
+					<form class="filters">
 						<i class="fal fa-filter-list"></i>
 						<select id="filter-order-type" name="order-type">
-							<option value="{{type}}">{{type}}</option>
+							<option>-</option>
+							<option>DELIVERY</option>
 							<option value="DELIVERY">DELIVERY</option>
 							<option value="PICKUP ">PICKUP </option>
 						</select>
 						<select id="filter-payment-type" name="payment">
-							<option value="{{payment}}">{{payment}}</option>
+							<option>-</option>
 							<option value="PAYME">PAYME</option>
 							<option value="APELSIN">APELSIN</option>
 							<option value="CASH">CASH</option>
 							<option value="CLICK">CLICK</option>
 							<option value="TERMINAL">TERMINAL</option>
 						</select>
-						<button type="submit">Применить</button>
+						<select id="filter-order-status" name="order-status">
+							<option>-</option>
+							<option value="CANCELLED">CANCELLED</option>
+							<option value="DELIVER">DELIVER</option>
+							<option value="ORDERED">ORDERED</option>
+							<option value="PREPARE">PREPARE</option>
+							<option value="SUCCESS">SUCCESS</option>
+						</select>
+						<button type="button" onclick="segregate('{{request.session.token}}')">Применить</button>
 					</form>
 					<div class="loader">
 						<img src="{% static 'spinner.svg' %}">
 					</div>
 					<table class="order-table" border="0" cellspacing="0">
-						<tr class="order-table-head">
-							<td>ID</td>
-							<td>Телефон</td>
-							<td>Оплачено</td>
-							<td>Цена</td>
-							<td>Статус</td>
-							<td>Дата</td>
-							<td>Доставка</td>
-							<td>Способ оплаты</td>
-						</tr>
-						{% if orders %}
-							{% for order in orders %}
-								<tr onclick="showOrder({{order|safeorder}})">
-									<td><small>{{order.id}}</small></td>
-									<td><small>{{order.user}}</small></td>
-									<td><small class="available-{{order.paid}}">{{order.paid | paid}}</small></td>
-									<td><small>{{order.price}}</small></td>
-									<td><small class="order-status-color-{{order.status}}">{{order.status}}</small></td>
-									<td><small>{{order.creationTime | todate}}</small></td>
-									<td><small>{{order.deliveryTime}}</small></td>
-									<td><small>{{order.paymentMethod}}</small></td>
-								</tr>
-							{% endfor %}
-						{% else %}
-							<tr>
-								<p><small>Нет доступных заказов</small></p>
+						<data style="display: none;" id="pagination-page" data-page="0"></data>
+						<tbody>
+							<tr class="order-table-head">
+								<td>ID</td>
+								<td>Телефон</td>
+								<td>Оплачено</td>
+								<td>Цена</td>
+								<td>Статус</td>
+								<td>Дата</td>
+								<td>Доставка</td>
+								<td>Способ оплаты</td>
 							</tr>
-						{% endif %}
+							{% if orders %}
+								{% for order in orders %}
+									<tr onclick="showOrder({{order|safeorder}})" class="order-table-row">
+										<td><small>{{order.id}}</small></td>
+										<td><small>{{order.user}}</small></td>
+										<td><small class="available-{{order.paid}}">{{order.paid | paid}}</small></td>
+										<td><small>{{order.price}}</small></td>
+										<td><small class="order-status-color-{{order.status}}">{{order.status}}</small></td>
+										<td><small>{{order.creationTime}}</small></td>
+										<td><small>{{order.deliveryTime}}</small></td>
+										<td><small>{{order.paymentMethod}}</small></td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								<tr>
+									<p><small>Нет доступных заказов</small></p>
+								</tr>
+							{% endif %}
+						</tbody>
 					</table>
+					<div class="pagination">
+						<button onclick="changePage('prev', '{{request.session.token}}')"><i class="fal fa-chevron-left"></i></button>
+						<label><small id="page-number">1</small></label>
+						<button onclick="changePage('next', '{{request.session.token}}')"><i class="fal fa-chevron-right"></i></button>
+					</div>
 				</div>
 			</div>
 		</div>
 		<script src="{% static 'orders.js' %}"></script>
+		<script src="{% static 'ajax.js' %}"></script>
 	{% endblock %}
 	<script src="{% static 'general.js' %}"></script>
 </body>

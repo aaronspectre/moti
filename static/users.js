@@ -30,4 +30,6 @@ function feeCard(card){
 
 	form.querySelector('#price').value = card.querySelector('.fee-price').innerText
 	form.querySelector('#payment').value = card.querySelector('.fee-payment').innerText
+	form.querySelector('#distance').value = card.querySelector('.fee-distance').innerText
+	form.querySelector('#nonpaid').value = card.querySelector('.fee-nonpaid').innerText
 }
