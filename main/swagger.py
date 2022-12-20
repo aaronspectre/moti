@@ -229,6 +229,44 @@ class Swagger:
 			report.write(response.content)
 
 
+	@staticmethod
+	def adverts(token):
+		response = requests.get(ENDPOINT+'advert/admin', headers = {'Authorization': token})
+		return json.loads(response.content)
+
+
+	@staticmethod
+	def add_advert(token, data, image):
+		boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
+		image.open(mode = 'rb')
+		data = '{\n  "title": {\n    "en": "'+data["title_en"]+'",\n    "ru": "'+data["title_ru"]+'",\n    "uz": "'+data["title_uz"]+'"\n  },\n  "content": {\n    "en": "'+data["content_en"]+'",\n    "ru": "'+data["content_ru"]+'",\n    "uz": "'+data["content_uz"]+'"\n  }\n}'
+		data = b''.join((f'--{boundary}\r\nContent-Disposition: form-data; name=advert;\r\nContent-Type: application/json\r\n\r\n{data}\r\n--{boundary}\r\nContent-Disposition: form-data; name=image; filename={image.name}\r\nContent-Type: {image.content_type}\r\n\r\n'.encode(), image.read(), b'\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T--\r\n'))
+		response = requests.post(ENDPOINT+'advert/admin', data = data, headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+		image.close()
+
+
+	@staticmethod
+	def update_advert(token, advert_id, data, images):
+		boundary = 'wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T'
+		data = '{\n  "title": {\n    "en": "'+data["title_en"]+'",\n    "ru": "'+data["title_ru"]+'",\n    "uz": "'+data["title_uz"]+'"\n  },\n  "content": {\n    "en": "'+data["content_en"]+'",\n    "ru": "'+data["content_ru"]+'",\n    "uz": "'+data["content_uz"]+'"\n  }\n}'
+		if 'image' in images:
+			image = images['image']
+			image.open(mode = 'rb')
+			data = b''.join((f'--{boundary}\r\nContent-Disposition: form-data; name=advert;\r\nContent-Type: application/json\r\n\r\n{data}\r\n--{boundary}\r\nContent-Disposition: form-data; name=image; filename={image.name}\r\nContent-Type: {image.content_type}\r\n\r\n'.encode(), image.read(), b'\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T--\r\n'))
+			response = requests.put(f'{ENDPOINT}advert/admin/{advert_id}', data = data, headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+			image.close()
+			return
+
+		data = b''.join((f'--{boundary}\r\nContent-Disposition: form-data; name=advert;\r\nContent-Type: application/json\r\n\r\n{data}'.encode(), b'\r\n--wL36Yn8afVp8Ag7AmP8qZ0SA4n1v9T--\r\n'))
+		response = requests.put(f'{ENDPOINT}advert/admin/{advert_id}', data = data, headers = {'Authorization': token, 'Content-Type': f'multipart/form-data; boundary={boundary}'})
+
+
+	@staticmethod
+	def remove_advert(token, advert_id):
+		response = requests.delete(f'{ENDPOINT}advert/admin/{advert_id}', headers = {'Authorization': token})
+		
+
+
 
 if __name__ == '__main__':
 	print('Swagger')

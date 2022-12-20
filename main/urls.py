@@ -35,5 +35,10 @@ urlpatterns = [
 	path('branch/edit/<int:branch_id>', views.update_branch, name = 'update_branch'),
 	path('branch/delete/<int:branch_id>', views.delete_branch, name = 'delete_branch'),
 
+	path('adverts', views.adverts, name = 'adverts'),
+	path('adverts/add', views.add_advert, name = 'add_advert'),
+	path('adverts/delete/<int:advert_id>', views.remove_advert, name = 'remove_advert'),
+	path('adverts/update/<int:advert_id>', views.update_advert, name = 'update_advert'),
+
 	path('logout', views.logout, name = 'logout'),
 ]

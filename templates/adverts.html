@@ -1,0 +1,123 @@
+{% extends 'home.html' %}
+{% load static %}
+{% load filters %}
+{% block content %}
+		<div class="add-form" id="add-form">
+			<div class="add-form-cover"></div>
+			<div class="add-category-form advert-form">
+				<div class="add-form-section">
+					<small><b>Название:</b></small>
+					<table>
+						<tr>
+							<td><small><b>ID:</b></small></td>
+							<td><small class="advert-id"></small></td>
+						</tr>
+						<tr>
+							<td><small><b>UZ:</b></small></td>
+							<td><small class="advert-title-uz"></small></td>
+						</tr>
+						<tr>
+							<td><small>РУ:</small></td>
+							<td><small class="advert-title-ru"></small></td>
+						</tr>
+						<tr>
+							<td><small><b>EN:</b></small></td>
+							<td><small class="advert-title-en"></small></td>
+						</tr>
+					</table>
+				</div>
+				<div class="add-form-section">
+					<small><b>Описание:</b></small>
+					<p><small class="advert-content-ru"></small></p>
+				</div>
+				<div class="add-form-section">
+					<small><b>Изображение:</b></small>
+					<img class="advert-view-image">
+				</div>
+				<button class="advert-form-button-remove" onclick="removeAdvert(this)"><i class="fal fa-trash"></i>&ensp;Удалить</button>
+				<button class="advert-form-button-edit" onclick="editAdvert(this)"><i class="fal fa-pen-to-square"></i>&ensp;Изменить</button>
+			</div>
+		</div>
+
+		<div class="add-form" id="advert-add">
+			<div class="add-form-cover"></div>
+			<form method="post" class="add-category-form advert-form-add" enctype="multipart/form-data">
+				<div class="add-form-section">
+					<label for="title"><small>Название</small></label>
+					<input required type="text" placeholder="UZ" id="title" name="title_uz">
+					<input required type="text" placeholder="RU" name="title_ru">
+					<input required type="text" placeholder="EN" name="title_en">
+					<label for="image"><small>Избражение</small></label>
+					<input required type="file" id="image" name="image" accept="image/*">
+				</div>
+				<div class="add-form-section">
+					<label for="content"><small>Описание</small></label>
+					<textarea required name="content_uz" id="content" rows="4" placeholder="UZ"></textarea>
+					<textarea required name="content_ru" rows="4" placeholder="RU"></textarea>
+					<textarea required name="content_en" rows="4" placeholder="EN"></textarea>
+				</div>
+				{% csrf_token %}
+				<button type="submit"><small>Сохранить</small></button>
+			</form>
+		</div>
+		<button id="call-form-button" data-link="{% url 'add_advert' %}"><i class="fas fa-plus"></i></button>
+
+		<div class="wrap">
+			<div class="sidebar">
+				<div class="sidemenu">
+					<img src="{% static 'moti.svg' %}" alt="logo">
+					<ul>
+						<li><a href="{% url 'home' %}"><i class="fal fa-home"></i></a></li>
+						{% if 'MANAGER' in request.session.roles %}
+						<li><a href="{% url 'charts' %}"><i class="fal fa-chart-line-up"></i></a></li>
+						<li><a href="{% url 'products' %}"><i class="fal fa-cart-shopping"></i></a></li>
+						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
+						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
+						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
+						<li><a href="{% url 'adverts' %}"><i class="fal fa-rectangle-ad"></i></a></li>
+						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+			<div class="content">
+				<div class="navbar">
+					<form action="">
+						<input type="text" placeholder="Search">
+						<button><i class="fal fa-search"></i></button>
+					</form>
+					<a href="{% url 'logout' %}"><i class="fal fa-arrow-right-from-bracket"></i></a>
+					{% if 'MANAGER' in request.session.roles %}
+					<a href="javascript:" onclick="showChangePassword()" id="initiator"><i class="fal fa-lock"></i></a>
+					{% endif %}
+				</div>
+				<div class="board">
+					<div class="users-board">
+						<table class="order-table" border="0" cellspacing="0">
+							<tr class="order-table-head">
+								<td>ID</td>
+								<td>Название</td>
+							</tr>
+							{% if ads %}
+								{% for ad in ads %}
+									<tr onclick="advertCard(`{{ad | safeorder}}`)">
+										<td><small class="fee-price">{{ad.id}}</small></td>
+										<td><small class="fee-payment">{{ad.title.ru}}</small></td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								<tr>
+									<p><small>0 элементов найдено</small></p>
+								</tr>
+							{% endif %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var call_button = document.getElementById('call-form-button')
+		</script>
+		<script src="{% static 'users.js' %}"></script>
+{% endblock %}

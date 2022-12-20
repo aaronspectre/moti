@@ -5,6 +5,17 @@ var table = document.querySelector('.order-table')
 var page = 0
 var pageNumber = Number(document.getElementById('page-number').innerText)
 
+var dateOptions = {
+	weekday: "short",
+	year: "numeric",
+	month: "short",
+	day: "numeric"
+}
+var timeOptions = {
+	hour: "2-digit",
+	minute: "2-digit"
+}
+
 var filters = {
 	payment: null,
 	status: null,
@@ -27,6 +38,16 @@ function changePage(path, token){
 }
 
 
+function todate(datetime){
+	try{
+		datetime = datetime.toLocaleDateString("ru-Ru", dateOptions) + '&ensp;' + datetime.toLocaleTimeString("ru-Ru", timeOptions)
+		return (datetime.includes('Invalid')) ? 'Не определен' : datetime
+	} catch(error){
+		return 'Не определен'
+	}
+}
+
+
 function constructor(data){
 	let tree = String()
 	let datetime = null
@@ -34,6 +55,7 @@ function constructor(data){
 
 	data.forEach(order => {
 		datetime = new Date(order.creationTime)
+		creationTime = todate(new Date(order.deliveryTime))
 		json = JSON.stringify(order)
 		tree += `
 			<tr onclick='showOrder(${json})' class="order-table-row">
@@ -42,8 +64,8 @@ function constructor(data){
 				<td><small class="available-${(order.paid) ? 'True' : 'False'}">${(order.paid) ? 'Да' : 'Нет'}</small></td>
 				<td><small>${order.price}</small></td>
 				<td><small class="order-status-color-${order.status}">${order.status}</small></td>
-				<td><small>${datetime.toDateString()}</small></td>
-				<td><small>${order.deliveryTime}</small></td>
+				<td><small>${datetime.toLocaleDateString("ru-Ru", dateOptions)}</small></td>
+				<td><small>${creationTime}</small></td>
 				<td><small>${order.paymentMethod}</small></td>
 			</tr>
 		`

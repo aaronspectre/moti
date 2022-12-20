@@ -22,11 +22,20 @@ def format_data(data):
 	return json.dumps(data)
 
 
-
 @register.filter
 def todate(timestamp):
-	print('Timestamp:', timestamp)
-	return datetime.fromtimestamp(timestamp / 1000).strftime('%d %b, %H:%M')
+	return datetime.fromtimestamp(timestamp / 1000).strftime('%a %b %d %Y').title()
+
+
+@register.filter
+def delivery(date):
+	try:
+		if date == 'null':
+			return 'Не определен'
+
+		return datetime.strptime(date, '%Y-%m-%d %H:%M:%S.%f').strftime('%b %d %Y, %H:%M').title()
+	except Exception as error:
+		return 'Не определен'
 
 
 @register.filter

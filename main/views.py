@@ -224,6 +224,38 @@ def update_fee(request):
 	return HttpResponseRedirect(reverse('fees'))
 
 
+def adverts(request):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	ads = Swagger.adverts(request.session['token'])
+	return render(request, 'adverts.html', {'ads': ads})
+
+
+def add_advert(request):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.add_advert(request.session['token'], request.POST, request.FILES['image'])
+	return HttpResponseRedirect(reverse('adverts'))
+
+
+def update_advert(request, advert_id):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.update_advert(request.session['token'], advert_id, request.POST, request.FILES)
+	return HttpResponseRedirect(reverse('adverts'))
+
+
+def remove_advert(request, advert_id):
+	if 'token' not in request.session:
+		return HttpResponseRedirect(reverse('login'))
+
+	Swagger.remove_advert(request.session['token'], advert_id)
+	return HttpResponseRedirect(reverse('adverts'))
+
+
 def logout(request):
 	del request.session['token']
 	del request.session['roles']

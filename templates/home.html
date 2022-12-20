@@ -152,6 +152,7 @@
 						<li><a href="{% url 'categories' %}"><i class="fal fa-list-timeline"></i></a></li>
 						<li><a href="{% url 'fees' %}"><i class="fal fa-road"></i></a></li>
 						<li><a href="{% url 'branches' %}"><i class="fal fa-shop"></i></a></li>
+						<li><a href="{% url 'adverts' %}"><i class="fal fa-rectangle-ad"></i></a></li>
 						<li><a href="{% url 'users' %}"><i class="fal fa-users"></i></a></li>
 						{% endif %}
 						{% if 'OPERATOR' in request.session.roles %}
@@ -222,8 +223,8 @@
 										<td><small class="available-{{order.paid}}">{{order.paid | paid}}</small></td>
 										<td><small>{{order.price}}</small></td>
 										<td><small class="order-status-color-{{order.status}}">{{order.status}}</small></td>
-										<td><small>{{order.creationTime}}</small></td>
-										<td><small>{{order.deliveryTime}}</small></td>
+										<td><small>{{order.creationTime | todate}}</small></td>
+										<td><small>{{order.deliveryTime | delivery}}</small></td>
 										<td><small>{{order.paymentMethod}}</small></td>
 									</tr>
 								{% endfor %}

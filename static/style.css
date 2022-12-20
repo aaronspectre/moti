@@ -36,7 +36,7 @@ body{
 .sidemenu ul{
 	list-style: none;
 	padding: 0;
-	padding-top: 10vh;
+	padding-top: 5vh;
 }
 .sidemenu li{
 	font-size: 3vh;
@@ -434,6 +434,12 @@ body{
 .order-status-color-CANCELLED{
 	color: red;
 }
+.order-status-color-PREPARE{
+	color: deepskyblue;
+}
+.order-status-color-SUCCESS{
+	color: darkgreen;
+}
 
 .add-form-order-split{
 	display: flex;
@@ -485,4 +491,26 @@ body{
 	border-radius: 2vh;
 	padding: 4vh 3vw;
 	font-size: 2vh;
+}
+
+.advert-form{
+	width: 70% !important;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column-gap: 4vw;
+	text-align: justify;
+}
+.advert-form img{
+	width: 100%;
+	border-radius: 2vh;
+	margin-top: 2vh;
+}
+.advert-form-add{
+	width: 70% !important;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-column-gap: 4vw;
+}
+.advert-form-add textarea{
+	font-size: 1.8vh;
 }
